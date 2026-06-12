@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 
 const route = useRoute();
 const { settings } = useSiteSettings();
+const { show: showCommandMenu } = useCommandMenu();
 const { y } = useWindowScroll();
 
 const scrolled = computed(() => y.value > 8);
@@ -72,6 +73,27 @@ watch(() => route.path, () => (mobileOpen.value = false));
       </nav>
 
       <div class="flex items-center gap-3">
+        <!-- Command palette trigger (⌘K). Full pill on desktop, icon on mobile. -->
+        <button
+          type="button"
+          aria-label="Search (press Command K)"
+          class="hidden items-center gap-2 rounded-full border border-border bg-card/60 py-1 pl-3 pr-1.5 text-sm text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring sm:inline-flex"
+          @click="showCommandMenu"
+        >
+          <Icon name="lucide:search" class="size-3.5" />
+          <span class="hidden lg:inline">Search</span>
+          <kbd class="rounded  border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] shadow-none">⌘ K</kbd>
+        </button>
+        <Button
+          variant="ghost"
+          size="icon"
+          class="sm:hidden"
+          aria-label="Search"
+          @click="showCommandMenu"
+        >
+          <Icon name="lucide:search" class="size-5" />
+        </Button>
+
         <span
           v-if="settings?.availableForWork"
           class="hidden items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground sm:inline-flex"

@@ -96,14 +96,24 @@ export const useApiClient = () => {
     },
   });
 
+  // Once server routes exist, Nitro augments ofetch's overloads to match request
+  // URLs against the local route table — which makes `api<T>(url)` either infer a
+  // TypedInternalResponse or blow the type-instantiation depth for arbitrary
+  // strings. This client only ever calls the external API, so we talk to it
+  // through a plain string→Promise signature and assert the caller's generic.
+  const call = api as unknown as (
+    url: string,
+    opts: Record<string, unknown>,
+  ) => Promise<unknown>;
+
   const request = async <T>(url: string, options?: FetchOptions): Promise<T> => {
     try {
-      return await api<T>(url, {
+      return (await call(url, {
         method: options?.method || 'GET',
         body: options?.body as Record<string, unknown> | undefined,
         headers: options?.headers,
         query: options?.query,
-      });
+      })) as T;
     } catch (error) {
       throw normalizeError(error);
     }

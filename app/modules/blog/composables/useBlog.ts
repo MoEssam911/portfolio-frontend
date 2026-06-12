@@ -1,9 +1,6 @@
 import type { BlogPost, ComputedBlogPost } from '~/modules/blog/types';
 import type { ApiPaginated } from '~/shared/types/api';
-
-function calcReadingTime(content: string): number {
-  return Math.ceil(content.split(/\s+/).length / 200);
-}
+import { readingTime } from '~/shared/utils/reading-time';
 
 export function useBlog(limit = 10) {
   const config = useRuntimeConfig();
@@ -12,7 +9,7 @@ export function useBlog(limit = 10) {
   const { data: _raw, pending, error } = useFetch<ApiPaginated<BlogPost>>(
     `${apiBase}/blogs`,
     {
-      key: 'blog-list',
+      key: `blog-list-${limit}`,
       query: { page: 1, limit },
     },
   );
@@ -23,7 +20,7 @@ export function useBlog(limit = 10) {
       ..._raw.value,
       data: _raw.value.data.map((post) => ({
         ...post,
-        readingTime: calcReadingTime(post.content),
+        readingTime: readingTime(post.content),
       })),
     };
   });

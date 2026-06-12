@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none" role="img" aria-label="Mohamed Essam — Portfolio">
+  <!-- Default social-share card. On-brand fallback used when a page has no
+       image of its own. Colours mirror the design tokens (background #0a0a0b,
+       primary violet #8b5cf6, foreground #fafafa). For maximum crawler support
+       (Slack/Discord/iMessage prefer raster), export this to a 1200x630 PNG at
+       /public/og-image.png and point DEFAULT_OG_IMAGE at it. -->
+  <defs>
+    <radialGradient id="glow" cx="78%" cy="18%" r="60%">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.45" />
+      <stop offset="55%" stop-color="#6d28d9" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#0a0a0b" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c4b5fd" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0a0a0b" />
+  <rect width="1200" height="630" fill="url(#glow)" />
+
+  <!-- monogram tile -->
+  <rect x="96" y="96" width="96" height="96" rx="22" fill="#111113" stroke="#8b5cf6" stroke-opacity="0.4" />
+  <text x="144" y="160" font-family="'Bricolage Grotesque', sans-serif" font-size="52" font-weight="700"
+        fill="url(#mark)" text-anchor="middle">ME</text>
+
+  <!-- name + role -->
+  <text x="96" y="350" font-family="'Bricolage Grotesque', sans-serif" font-size="92" font-weight="700"
+        fill="#fafafa" letter-spacing="-2">Mohamed Essam</text>
+  <text x="100" y="416" font-family="Geist, sans-serif" font-size="38" font-weight="500"
+        fill="#a1a1aa">Full-stack engineer · building from the future</text>
+
+  <!-- footer rule + url -->
+  <rect x="96" y="500" width="1008" height="1" fill="#27272a" />
+  <circle cx="104" cy="548" r="6" fill="#34d399" />
+  <text x="124" y="555" font-family="'Geist Mono', monospace" font-size="26" fill="#a1a1aa">Available for work</text>
+  <text x="1104" y="555" font-family="'Geist Mono', monospace" font-size="26" fill="#8b5cf6" text-anchor="end">mohamedessam.dev</text>
+</svg>

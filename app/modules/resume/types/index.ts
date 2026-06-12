@@ -46,6 +46,23 @@ export interface ResumeLink {
   order: number;
 }
 
+/** A normalised timeline entry — experiences and educations are mapped onto this. */
+export interface TimelineEntry {
+  id: string;
+  /** Primary line: job title or degree. */
+  title: string;
+  /** Secondary line: company or school. */
+  org: string;
+  location?: string | null;
+  start: string | null;
+  end: string | null;
+  current: boolean;
+  /** Experience bullets, or a single-element description for education. */
+  bullets: string[];
+  /** Optional trailing meta (e.g. field of study). */
+  meta?: string | null;
+}
+
 export interface ResumeProfile {
   id: string;
   headline: string | null;

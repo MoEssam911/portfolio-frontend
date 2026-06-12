@@ -69,6 +69,35 @@ html.lenis body {
 }
 
 /* ─────────────────────────────────────────────────────────────────────
+   Page transitions — View Transitions API (enabled via
+   experimental.viewTransition in nuxt.config.ts). A subtle cross-fade with a
+   small upward settle on the incoming page. Kept short and GPU-friendly
+   (opacity/transform only); neutralised entirely under reduced motion below.
+───────────────────────────────────────────────────────────────────── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-normal, 250ms);
+  animation-timing-function: var(--ease-out, ease);
+}
+::view-transition-old(root) {
+  animation-name: vt-fade-out;
+}
+::view-transition-new(root) {
+  animation-name: vt-fade-in;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────
    Reduced motion — global backstop.
    Composables (useScrollReveal) and the Lenis plugin already skip JS-driven
    motion when the user prefers reduced motion; this neutralises any remaining
@@ -85,5 +114,11 @@ html.lenis body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  /* Skip the page cross-fade entirely. */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }
