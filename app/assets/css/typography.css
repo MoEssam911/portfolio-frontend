@@ -1,0 +1,159 @@
+/* ═════════════════════════════════════════════════════════════════════
+   TYPOGRAPHY — element + long-form styles
+   Direction: "Precision" (Violet). Fonts: Bricolage Grotesque (display)
+   + Geist (body) + Geist Mono. Family tokens live in tokens.css.
+
+   Element defaults (html/body/h1–h6) live in base.css. This file adds:
+     · .prose   — blog / long-form content container
+     · code/kbd — inline + block code
+     · .label   — small-caps tags, timestamps, badges
+     · ::selection
+═════════════════════════════════════════════════════════════════════ */
+
+@layer base {
+  /* ───────────────────────────────────────────────────────────────────
+     PROSE — apply .prose to a long-form / blog body container
+  ─────────────────────────────────────────────────────────────────── */
+  .prose {
+    max-width: 65ch;
+    font-size: var(--text-lg);
+    line-height: var(--leading-loose);
+    color: var(--color-muted-foreground);
+  }
+
+  .prose h2 {
+    font-size: var(--text-3xl);
+    margin-top: 2.5em;
+    margin-bottom: 0.75em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .prose h3 {
+    font-size: var(--text-2xl);
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+  }
+  .prose h4 {
+    font-size: var(--text-xl);
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+  }
+  .prose p {
+    margin-bottom: 1.5em;
+  }
+  .prose a {
+    color: var(--color-primary-light);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--color-primary-border);
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      text-decoration-color var(--duration-fast) var(--ease-out);
+  }
+  .prose a:hover {
+    color: var(--color-primary);
+    text-decoration-color: var(--color-primary);
+  }
+  .prose strong {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-foreground);
+  }
+  .prose em {
+    font-style: italic;
+    color: var(--color-foreground);
+  }
+  .prose blockquote {
+    border-left: 2px solid var(--color-primary);
+    padding-left: 1.25em;
+    margin-left: 0;
+    color: var(--color-subtle);
+    font-style: italic;
+  }
+  .prose ul,
+  .prose ol {
+    padding-left: 1.5em;
+    margin-bottom: 1.5em;
+  }
+  .prose li {
+    margin-bottom: 0.5em;
+  }
+  .prose li::marker {
+    color: var(--color-primary);
+  }
+  .prose hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: 3em 0;
+  }
+
+  /* ───────────────────────────────────────────────────────────────────
+     LABEL / METADATA — small caps for tags, timestamps, badges
+  ─────────────────────────────────────────────────────────────────── */
+  .label {
+    font-family: var(--font-sans);
+    font-size: var(--text-2xs);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--color-subtle);
+    line-height: var(--leading-none);
+  }
+
+  /* ───────────────────────────────────────────────────────────────────
+     CODE — inline + block
+  ─────────────────────────────────────────────────────────────────── */
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-mono);
+  }
+
+  /* Inline code */
+  :not(pre) > code {
+    font-size: 0.875em;
+    background: var(--color-muted);
+    color: var(--color-primary-light);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.15em 0.4em;
+  }
+
+  /* Code blocks */
+  pre {
+    font-size: var(--text-sm);
+    line-height: 1.7;
+    background: var(--color-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    tab-size: 2;
+  }
+  pre code {
+    font-size: inherit;
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: var(--color-muted-foreground);
+  }
+
+  /* Keyboard shortcut */
+  kbd {
+    font-size: 0.8em;
+    background: var(--color-secondary-dark);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    padding: 0.15em 0.5em;
+    color: var(--color-subtle);
+    box-shadow: 0 1px 0 var(--color-border-strong);
+  }
+
+  /* ───────────────────────────────────────────────────────────────────
+     SELECTION — matches the violet accent
+  ─────────────────────────────────────────────────────────────────── */
+  ::selection {
+    background-color: var(--color-primary-muted);
+    color: var(--color-foreground);
+  }
+}

@@ -1,0 +1,112 @@
+/* ─────────────────────────────────────────────────────────────────────
+   Utility layer — app helpers
+───────────────────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Tabular numerals — always use for money */
+  .nums-tabular {
+    font-variant-numeric: tabular-nums;
+    font-family: var(--font-sans);
+  }
+
+  /* Card surface — shadow-only depth (no border) */
+  .card-surface {
+    background: var(--color-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  .card-surface-md {
+    background: var(--color-card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Touch target enforcement */
+  .touch-target {
+    min-height: var(--touch-min);
+    min-width: var(--touch-min);
+  }
+  .touch-target-lg {
+    min-height: var(--touch-primary);
+  }
+  .touch-row {
+    min-height: var(--touch-row);
+  }
+
+  /* Active indicator pulse */
+  .pulse-dot {
+    animation: pulse-dot 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(0.8);
+    }
+  }
+
+  /* ─── Brand gradients — violet "Precision" identity ─────────────────
+     Token sources live in tokens.css (--gradient-*). Apply these to a
+     full-bleed / absolutely-positioned, pointer-events-none layer. */
+
+  /* Hero — violet bloom from top center */
+  .bg-hero-glow {
+    background: var(--gradient-hero);
+  }
+
+  /* Section / card — very subtle top glow */
+  .bg-card-glow {
+    background: var(--gradient-card-glow);
+  }
+
+  /* Ambient mesh — faint multi-point texture for large sections */
+  .bg-mesh {
+    background: var(--gradient-mesh);
+  }
+
+  /* Bottom fade-out — overlay for scroll-faded content (place over content) */
+  .fade-bottom {
+    background: var(--gradient-fade-bottom);
+  }
+
+  /* Radial violet spotlight — decorative blob behind feature content */
+  .glow-spot {
+    background: radial-gradient(circle at center, var(--violet-glow) 0%, transparent 70%);
+  }
+
+  /* Signature violet text gradient — hero words / highlights.
+     Pair with a font-display heading; keep to a few words. */
+  .text-gradient {
+    background: linear-gradient(
+      135deg,
+      var(--color-primary-light) 0%,
+      var(--color-primary) 50%,
+      var(--color-primary-active) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* ─── Glow — violet accent (key CTAs / focused elements only) ──────── */
+
+  /* Ring + soft violet halo */
+  .glow {
+    box-shadow: var(--shadow-glow);
+  }
+  .glow-strong {
+    box-shadow: var(--shadow-glow-strong);
+  }
+
+  /* Hover-reveal glow — eases in on hover */
+  .glow-hover {
+    transition: box-shadow var(--duration-normal) var(--ease-out);
+  }
+  .glow-hover:hover {
+    box-shadow: var(--shadow-glow);
+  }
+}

@@ -1,0 +1,46 @@
+/* ─────────────────────────────────────────────────────────────────────
+   Global base styles
+───────────────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: var(--leading-relaxed);
+
+    /* Render quality */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-optical-sizing: auto;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    @apply font-sans;
+  }
+
+  /* Display headings — Bricolage Grotesque, tight tracking. Never exceed 700;
+     heavier weights rarely render refined at screen size. Override per-section
+     in components when a different size/weight is needed. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-tight);
+    color: var(--color-foreground);
+    font-optical-sizing: auto;
+  }
+
+  /* NOTE (RTL cleanup): the previous Arabic/RTL build forced these Latin inputs
+     to `direction: ltr; text-align: end` to right-align them. The app is now
+     LTR-only, so the override is removed — inputs use the default LTR alignment.
+     BaseFormField still sets dir="ltr" on email/tel/number/url/password. */
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+}

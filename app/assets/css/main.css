@@ -1,0 +1,23 @@
+/* ═════════════════════════════════════════════════════════════════════
+   PORTFOLIO — Tailwind v4 CSS entry.
+
+   This file only wires imports. The design system is split for discoverability:
+     tokens.css     — LAYER 1 primitives + LAYER 2 @theme + chrome/z-index vars
+     base.css       — @layer base (resets, html/body, heading defaults)
+     typography.css — @layer base (prose, code, .label, ::selection)
+     utilities.css  — @layer utilities (app helpers + gradients)
+
+   Dark-only theme. See tokens.css.
+═════════════════════════════════════════════════════════════════════ */
+
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn-vue/tailwind.css';
+
+@import './tokens.css';
+@import './base.css';
+@import './typography.css';
+@import './utilities.css';
+
+/* Scan app source for utility classes. */
+@source "../../";
