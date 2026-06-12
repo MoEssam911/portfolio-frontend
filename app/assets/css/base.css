@@ -44,3 +44,46 @@
     @apply border-border outline-ring/50;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────
+   Lenis smooth scroll — required structural styles.
+   The engine itself is started only when motion is allowed (see
+   app/plugins/lenis.client.ts); these rules are inert until Lenis adds its
+   classes to <html>.
+───────────────────────────────────────────────────────────────────── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Reduced motion — global backstop.
+   Composables (useScrollReveal) and the Lenis plugin already skip JS-driven
+   motion when the user prefers reduced motion; this neutralises any remaining
+   CSS transitions/animations and disables smooth scroll anchoring.
+───────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap');
+
 /* ═════════════════════════════════════════════════════════════════════
    PORTFOLIO — Tailwind v4 CSS entry.
 
@@ -19,5 +22,20 @@
 @import './typography.css';
 @import './utilities.css';
 
+@custom-variant dark (&:is(.dark *));
+
 /* Scan app source for utility classes. */
 @source "../../";
+
+@theme inline {
+  --font-heading: var(--font-sans);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

@@ -1,22 +1,18 @@
 <script setup lang="ts">
 import { ConfigProvider } from 'reka-ui';
 
+import { TooltipProvider } from '@/components/ui/tooltip';
+
 // LTR, English. Dark is the only theme — it lives in :root, so we never add a
 // `.dark` class here. See app/assets/css/tokens.css.
+// Fonts are self-hosted via @nuxt/fonts (see nuxt.config.ts) — no external
+// font stylesheet links here.
 useHead({
   htmlAttrs: {
     lang: 'en',
     dir: 'ltr',
   },
-  link: [
-    { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
-    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-    {
-      rel: 'stylesheet',
-      href: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
-    },
-  ],
+  link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
 });
 </script>
 
@@ -24,9 +20,14 @@ useHead({
   <!-- ConfigProvider propagates text direction (LTR) to all reka-ui primitives,
        including portalled overlays (Dialog/Sheet/Popover/Select/Tooltip). -->
   <ConfigProvider dir="ltr">
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-    <!-- Toast and confirm providers will be added when those components are built -->
+    <TooltipProvider :delay-duration="200">
+      <NuxtLayout>
+        <NuxtPage />
+      </NuxtLayout>
+
+      <!-- Global overlays: toasts (vue-sonner) + headless confirm dialog host. -->
+      <Sonner position="bottom-right" close-button />
+      <AppConfirmHost />
+    </TooltipProvider>
   </ConfigProvider>
 </template>

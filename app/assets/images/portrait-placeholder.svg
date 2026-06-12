@@ -1,0 +1,22 @@
+<!-- PHOTO SWAP: placeholder professional portrait (3:4). Replace this file (or the
+     import in app/shared/components/app/Portrait.vue) with the real portrait. -->
+<svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Portrait placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#18181b" />
+      <stop offset="1" stop-color="#111113" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="38%" r="55%">
+      <stop offset="0" stop-color="#8b5cf6" stop-opacity="0.22" />
+      <stop offset="1" stop-color="#8b5cf6" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)" />
+  <rect width="600" height="800" fill="url(#glow)" />
+  <!-- Simple silhouette: head + shoulders -->
+  <g fill="#26262b">
+    <circle cx="300" cy="320" r="120" />
+    <path d="M120 800c0-130 80-235 180-235s180 105 180 235H120Z" />
+  </g>
+  <text x="300" y="760" text-anchor="middle" fill="#52525b" font-family="Geist, system-ui, sans-serif" font-size="22" letter-spacing="6">PHOTO</text>
+</svg>
