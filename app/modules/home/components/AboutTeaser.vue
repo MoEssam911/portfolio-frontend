@@ -32,7 +32,7 @@ useScrollReveal(sectionRef, { selector: '[data-reveal]', stagger: 0.1 });
           class="relative overflow-hidden rounded-3xl border border-primary-border bg-card shadow-glow ring-1 ring-primary/20"
         >
           <!-- PHOTO SWAP: <Portrait> centralises the placeholder swap point. -->
-          <Portrait class="aspect-[4/5] w-full" alt="Portrait of Mohamed Essam" />
+          <Portrait class="aspect-4/5 w-full" alt="Portrait of Mohamed Essam" />
         </div>
       </div>
 

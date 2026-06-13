@@ -12,7 +12,10 @@ defineProps<Props>();
 
 <template>
   <header class="relative overflow-hidden border-b border-border">
-    <div class="bg-hero-glow pointer-events-none absolute inset-0 -z-10 opacity-60" aria-hidden="true" />
+    <div
+      class="bg-hero-glow pointer-events-none absolute inset-0 -z-10 opacity-60"
+      aria-hidden="true"
+    />
     <Container class="py-14 sm:py-20">
       <NuxtLink
         to="/projects"
@@ -31,18 +34,20 @@ defineProps<Props>();
           </Badge>
         </div>
 
-        <h1 class="max-w-4xl text-balance font-display text-4xl text-foreground sm:text-5xl lg:text-6xl">
+        <h1
+          class="max-w-4xl text-balance font-display text-4xl text-foreground sm:text-5xl lg:text-6xl"
+        >
           {{ project.title }}
         </h1>
 
-        <p
-          v-if="project.excerpt"
-          class="max-w-2xl text-pretty text-lg text-muted-foreground"
-        >
+        <p v-if="project.excerpt" class="max-w-2xl text-pretty text-lg text-muted-foreground">
           {{ project.excerpt }}
         </p>
 
-        <div v-if="project.liveUrl || project.repoUrl" class="mt-2 flex flex-wrap items-center gap-3">
+        <div
+          v-if="project.liveUrl || project.repoUrl"
+          class="mt-2 flex flex-wrap items-center gap-3"
+        >
           <a
             v-if="project.liveUrl"
             :href="project.liveUrl"
@@ -74,7 +79,7 @@ defineProps<Props>();
         <img
           :src="project.thumbnail.url"
           :alt="project.thumbnail.alt || project.title"
-          class="aspect-[16/9] w-full object-cover"
+          class="aspect-video w-full object-cover"
           fetchpriority="high"
           decoding="async"
         />

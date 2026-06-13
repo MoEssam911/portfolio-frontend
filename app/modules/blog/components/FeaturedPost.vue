@@ -18,7 +18,7 @@ const visibleTags = computed(() => props.post.tags.slice(0, 3));
     class="group grid overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:border-primary-border lg:grid-cols-2"
   >
     <!-- Cover -->
-    <div class="relative aspect-[16/10] w-full overflow-hidden bg-muted lg:aspect-auto lg:h-full">
+    <div class="relative aspect-16/10 w-full overflow-hidden bg-muted lg:aspect-auto lg:h-full">
       <img
         v-if="post.coverImage"
         :src="post.coverImage.url"
@@ -60,9 +60,7 @@ const visibleTags = computed(() => props.post.tags.slice(0, 3));
         <Badge v-for="tag in visibleTags" :key="tag.id" variant="outline">{{ tag.name }}</Badge>
       </div>
 
-      <span
-        class="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary"
-      >
+      <span class="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
         Read article
         <Icon
           name="lucide:arrow-right"

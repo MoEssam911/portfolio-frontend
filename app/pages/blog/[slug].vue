@@ -92,7 +92,7 @@ useHead({
         <Skeleton class="h-5 w-28" />
         <Skeleton class="mt-8 h-14 w-3/4" />
         <Skeleton class="mt-4 h-6 w-2/3" />
-        <Skeleton class="mt-12 aspect-[16/9] w-full rounded-3xl" />
+        <Skeleton class="mt-12 aspect-video w-full rounded-3xl" />
       </Container>
     </div>
 

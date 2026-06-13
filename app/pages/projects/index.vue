@@ -56,18 +56,19 @@ useSeo({
         <div class="flex flex-wrap gap-2">
           <Skeleton v-for="n in 5" :key="n" class="h-8 w-20 rounded-full" />
         </div>
-        <div class="grid auto-rows-[1fr] gap-5 [grid-template-columns:repeat(auto-fill,minmax(min(100%,20rem),1fr))]">
+        <div
+          class="grid auto-rows-[1fr] gap-5 grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))]"
+        >
           <Skeleton v-for="n in 6" :key="n" class="h-72 rounded-2xl" />
         </div>
       </div>
 
       <!-- Error -->
-      <div
-        v-else-if="error"
-        class="rounded-2xl border border-border bg-card p-12 text-center"
-      >
+      <div v-else-if="error" class="rounded-2xl border border-border bg-card p-12 text-center">
         <Icon name="lucide:triangle-alert" class="mx-auto size-6 text-muted-foreground" />
-        <p class="mt-3 text-sm text-muted-foreground">Couldn't load projects right now. Please try again later.</p>
+        <p class="mt-3 text-sm text-muted-foreground">
+          Couldn't load projects right now. Please try again later.
+        </p>
       </div>
 
       <!-- Empty (nothing published) -->
@@ -88,7 +89,9 @@ useSeo({
           class="rounded-2xl border border-dashed border-border bg-card/50 p-12 text-center"
         >
           <p class="text-sm text-muted-foreground">
-            No projects on this page use <span class="font-mono text-foreground">{{ activeTech }}</span>.
+            No projects on this page use
+            <span class="font-mono text-foreground">{{ activeTech }}</span
+            >.
           </p>
           <button
             type="button"
@@ -102,11 +105,7 @@ useSeo({
         <ProjectGrid v-else :projects="filteredProjects" />
 
         <!-- Pagination hidden while a client filter narrows the page. -->
-        <ProjectPagination
-          v-if="meta && !activeTech"
-          v-model="page"
-          :meta="meta"
-        />
+        <ProjectPagination v-if="meta && !activeTech" v-model="page" :meta="meta" />
       </div>
     </Section>
   </div>

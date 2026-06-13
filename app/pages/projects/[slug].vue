@@ -83,7 +83,7 @@ useHead({
         <Skeleton class="h-5 w-28" />
         <Skeleton class="mt-8 h-14 w-3/4" />
         <Skeleton class="mt-4 h-6 w-2/3" />
-        <Skeleton class="mt-12 aspect-[16/9] w-full rounded-3xl" />
+        <Skeleton class="mt-12 aspect-video w-full rounded-3xl" />
       </Container>
     </div>
 
@@ -95,10 +95,7 @@ useHead({
         <p class="mt-3 text-muted-foreground">
           This project may have been moved or is no longer published.
         </p>
-        <NuxtLink
-          to="/projects"
-          :class="cn(buttonVariants({ size: 'lg' }), 'mt-8 h-10 px-5')"
-        >
+        <NuxtLink to="/projects" :class="cn(buttonVariants({ size: 'lg' }), 'mt-8 h-10 px-5')">
           <Icon name="lucide:arrow-left" class="size-4" />
           Back to projects
         </NuxtLink>

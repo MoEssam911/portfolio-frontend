@@ -25,7 +25,7 @@ const visibleTags = computed(() => props.post.tags.slice(0, 2));
     "
   >
     <!-- Cover -->
-    <div class="relative aspect-[16/9] w-full overflow-hidden bg-muted">
+    <div class="relative aspect-video w-full overflow-hidden bg-muted">
       <img
         v-if="post.coverImage"
         :src="post.coverImage.url"

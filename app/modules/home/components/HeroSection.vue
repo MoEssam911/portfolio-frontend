@@ -26,7 +26,7 @@ useHeroIntro(heroRef, 'home');
 <template>
   <section
     ref="heroRef"
-    class="relative flex min-h-[100svh] items-center overflow-hidden"
+    class="relative flex min-h-svh items-center overflow-hidden"
     aria-label="Introduction"
   >
     <!-- Signature futuristic background — violet aurora + grid, off when reduced. -->
@@ -65,10 +65,14 @@ useHeroIntro(heroRef, 'home');
                 :key="`${word}-${i}`"
                 data-word
                 class="mr-[0.22em] inline-block"
-              >{{ word }}</span>
+                >{{ word }}</span
+              >
             </h1>
 
-            <p data-hero-reveal class="mt-6 max-w-lg text-pretty text-lg text-muted-foreground sm:text-xl">
+            <p
+              data-hero-reveal
+              class="mt-6 max-w-lg text-pretty text-lg text-muted-foreground sm:text-xl"
+            >
               {{ heroSubtitle }}
             </p>
 
@@ -107,16 +111,17 @@ useHeroIntro(heroRef, 'home');
 
             <!-- Body -->
             <div class="space-y-2.5 p-5 font-mono text-sm leading-relaxed sm:p-6">
-              <p class="text-muted-foreground">
-                <span class="text-primary">$</span> whoami
-              </p>
+              <p class="text-muted-foreground"><span class="text-primary">$</span> whoami</p>
               <p v-for="line in lines" :key="line.key" class="text-muted-foreground">
                 <span class="text-primary/70">{{ line.key }}:</span>
                 <span class="ml-2 text-foreground">{{ line.value }}</span>
               </p>
               <p class="text-muted-foreground">
                 <span class="text-primary/70">status:</span>
-                <span class="ml-2" :class="availableForWork ? 'text-success' : 'text-muted-foreground'">
+                <span
+                  class="ml-2"
+                  :class="availableForWork ? 'text-success' : 'text-muted-foreground'"
+                >
                   {{ availableForWork ? 'open to work' : 'currently engaged' }}
                 </span>
                 <span

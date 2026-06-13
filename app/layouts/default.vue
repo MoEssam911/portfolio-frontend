@@ -18,7 +18,7 @@ provideSiteSettings({ settings, pending });
          non-interactive, sits behind all content. Pages can layer their own
          effects on top (e.g. the Phase 1 hero). -->
     <div
-      class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[40rem] bg-hero-glow"
+      class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-160 bg-hero-glow"
       aria-hidden="true"
     />
 

@@ -12,7 +12,10 @@ const { formatDate } = useFormatters();
 
 <template>
   <header class="relative overflow-hidden border-b border-border">
-    <div class="bg-hero-glow pointer-events-none absolute inset-0 -z-10 opacity-60" aria-hidden="true" />
+    <div
+      class="bg-hero-glow pointer-events-none absolute inset-0 -z-10 opacity-60"
+      aria-hidden="true"
+    />
     <Container size="narrow" class="py-14 sm:py-20">
       <NuxtLink
         to="/blog"
@@ -52,7 +55,7 @@ const { formatDate } = useFormatters();
         <img
           :src="post.coverImage.url"
           :alt="post.coverImage.alt || post.title"
-          class="aspect-[16/9] w-full object-cover"
+          class="aspect-video w-full object-cover"
           fetchpriority="high"
           decoding="async"
         />

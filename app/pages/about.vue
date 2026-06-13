@@ -146,7 +146,7 @@ useHead({
             class="relative overflow-hidden rounded-3xl border border-primary-border bg-card shadow-glow ring-1 ring-primary/20"
           >
             <!-- PHOTO SWAP: featured About-page portrait. -->
-            <Portrait class="aspect-[4/5] w-full" :alt="`Portrait of ${name}`" />
+            <Portrait class="aspect-4/5 w-full" :alt="`Portrait of ${name}`" />
           </div>
         </div>
       </div>

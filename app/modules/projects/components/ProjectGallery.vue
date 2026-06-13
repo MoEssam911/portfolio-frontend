@@ -49,7 +49,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown));
         <img
           :src="image.media.url"
           :alt="image.media.alt || `Gallery image ${i + 1}`"
-          class="aspect-[16/10] w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+          class="aspect-16/10 w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
           loading="lazy"
           decoding="async"
         />
@@ -63,9 +63,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown));
 
     <!-- Lightbox -->
     <Dialog v-model:open="open">
-      <DialogContent
-        class="w-full max-w-[calc(100%-2rem)] gap-3 bg-card p-3 sm:max-w-4xl"
-      >
+      <DialogContent class="w-full max-w-[calc(100%-2rem)] gap-3 bg-card p-3 sm:max-w-4xl">
         <DialogTitle class="sr-only">Project gallery image</DialogTitle>
 
         <div class="relative overflow-hidden rounded-xl bg-muted">
@@ -97,10 +95,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown));
           </template>
         </div>
 
-        <p
-          v-if="activeImage?.media.caption"
-          class="px-1 text-center text-sm text-muted-foreground"
-        >
+        <p v-if="activeImage?.media.caption" class="px-1 text-center text-sm text-muted-foreground">
           {{ activeImage.media.caption }}
         </p>
         <p v-if="images.length > 1" class="text-center font-mono text-xs text-muted-foreground">
