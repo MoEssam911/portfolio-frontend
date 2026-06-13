@@ -13,11 +13,16 @@ const route = useRoute();
 
 const appName = config.public.appName as string;
 
+// Share the same cached 'site-settings' fetch — no extra network call.
+const { data: settingsData } = useSettings();
+const siteTitle = computed(() => settingsData.value?.siteTitle ?? appName);
+
 // Canonical is centralised here for every route (path-based) so individual pages
 // never need to set it — a single source of truth avoids duplicate <link> tags.
 const canonical = computed(() => `${url.origin}${route.path}`);
 
 useHead({
+  titleTemplate: (chunk) => (chunk ? `${chunk} — ${siteTitle.value}` : siteTitle.value),
   htmlAttrs: {
     lang: 'en',
     dir: 'ltr',
@@ -28,7 +33,7 @@ useHead({
     {
       rel: 'alternate',
       type: 'application/rss+xml',
-      title: `${appName} — Blog`,
+      title: () => `${siteTitle.value} — Blog`,
       href: '/feed.xml',
     },
   ],
@@ -37,7 +42,7 @@ useHead({
 // Site-wide SEO defaults. Pages override title/description/image via useSeo or
 // useSeoMeta; anything they don't set falls back to these.
 useSeoMeta({
-  ogSiteName: appName,
+  ogSiteName: () => siteTitle.value,
   ogType: 'website',
   ogLocale: 'en_US',
   ogImage: absoluteUrl(DEFAULT_OG_IMAGE, url.origin),

@@ -4,7 +4,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
 const route = useRoute();
-const config = useRuntimeConfig();
 const url = useRequestURL();
 
 const slug = computed(() => route.params.slug as string);
@@ -39,9 +38,8 @@ const notFound = computed(() => !pending.value && (Boolean(error.value) || !post
 const canonical = computed(() => `${url.origin}/blog/${slug.value}`);
 
 // Reactive SEO — getters re-evaluate once the fetch resolves (SSR awaits it).
-const appName = config.public.appName as string;
 useSeoMeta({
-  title: () => (post.value ? `${post.value.title} — ${appName}` : `Post — ${appName}`),
+  title: () => post.value?.title ?? 'Post',
   ogTitle: () => (post.value ? post.value.title : undefined),
   description: () => post.value?.excerpt || undefined,
   ogDescription: () => post.value?.excerpt || undefined,

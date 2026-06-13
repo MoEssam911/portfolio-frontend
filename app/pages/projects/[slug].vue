@@ -4,7 +4,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
 const route = useRoute();
-const config = useRuntimeConfig();
 const url = useRequestURL();
 
 const slug = computed(() => route.params.slug as string);
@@ -35,10 +34,9 @@ const notFound = computed(() => !pending.value && (Boolean(error.value) || !proj
 const canonical = computed(() => `${url.origin}/projects/${slug.value}`);
 
 // Reactive SEO — getters re-evaluate once the fetch resolves (SSR awaits it).
-const appName = config.public.appName as string;
 useSeoMeta({
-  title: () => (project.value ? `${project.value.title} — ${appName}` : `Project — ${appName}`),
-  ogTitle: () => (project.value ? `${project.value.title} — ${appName}` : undefined),
+  title: () => project.value?.title ?? 'Project',
+  ogTitle: () => project.value?.title ?? undefined,
   description: () => project.value?.excerpt || undefined,
   ogDescription: () => project.value?.excerpt || undefined,
   ogType: 'article',

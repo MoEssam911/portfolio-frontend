@@ -9,7 +9,6 @@ const appName = config.public.appName as string;
 // Reactive meta — getters re-evaluate once the settings request resolves (SSR
 // waits for it), so crawlers receive the populated values.
 useSeoMeta({
-  title: () => settings.value?.siteTitle || appName,
   ogTitle: () => settings.value?.siteTitle || appName,
   description: () => settings.value?.siteDescription || undefined,
   ogDescription: () => settings.value?.siteDescription || undefined,
@@ -60,10 +59,6 @@ useHead({
 </script>
 
 <template>
-  <!-- LOGO PREVIEW — REMOVE AFTER PICK -->
-  <LogoShowcase />
-  <!-- / LOGO PREVIEW -->
-
   <!-- Home composition — section order mirrors the knowledge base. -->
   <HeroSection />
   <FeaturedWork />

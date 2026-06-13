@@ -20,10 +20,14 @@ const { y } = useWindowScroll();
 const scrolled = computed(() => y.value > 8);
 const mobileOpen = ref(false);
 
-const isActive = (to: string) => route.path === to || route.path.startsWith(`${to}/`);
+const isActive = (to: string) =>
+  to === '/' ? route.path === '/' : route.path === to || route.path.startsWith(`${to}/`);
 
 // Close the mobile sheet whenever navigation happens.
-watch(() => route.path, () => (mobileOpen.value = false));
+watch(
+  () => route.path,
+  () => (mobileOpen.value = false),
+);
 </script>
 
 <template>
@@ -43,7 +47,7 @@ watch(() => route.path, () => (mobileOpen.value = false));
         class="rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
         aria-label="Home"
       >
-        <AppLogo :label="settings?.siteTitle || 'Mohamed Essam'" />
+        <AppLogo mark-only />
       </NuxtLink>
 
       <!-- Desktop navigation -->
@@ -82,7 +86,10 @@ watch(() => route.path, () => (mobileOpen.value = false));
         >
           <Icon name="lucide:search" class="size-3.5" />
           <span class="hidden lg:inline">Search</span>
-          <kbd class="rounded  border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] shadow-none">⌘ K</kbd>
+          <kbd
+            class="rounded border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] shadow-none"
+            >⌘ K</kbd
+          >
         </button>
         <Button
           variant="ghost"
@@ -93,14 +100,6 @@ watch(() => route.path, () => (mobileOpen.value = false));
         >
           <Icon name="lucide:search" class="size-5" />
         </Button>
-
-        <span
-          v-if="settings?.availableForWork"
-          class="hidden items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground sm:inline-flex"
-        >
-          <span class="pulse-dot size-1.5 rounded-full bg-success" aria-hidden="true" />
-          Available for work
-        </span>
 
         <NuxtLink
           to="/contact"
@@ -119,7 +118,7 @@ watch(() => route.path, () => (mobileOpen.value = false));
           <SheetContent side="right" class="w-4/5 max-w-xs">
             <SheetHeader class="p-6 pb-0">
               <SheetTitle class="text-left">
-                <AppLogo size="sm" :label="settings?.siteTitle || 'Mohamed Essam'" />
+                <AppLogo size="sm" mark-only />
               </SheetTitle>
               <SheetDescription class="sr-only">Site navigation</SheetDescription>
             </SheetHeader>
