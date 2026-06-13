@@ -32,9 +32,16 @@ font-mono    → Geist Mono
 NEVER hardcode font-family in components.
 
 ### Data fetching
-Always useFetch (non-blocking, no await).
-Always transform: (res) => res.data to unwrap the { success, data } envelope.
-Always provide a default: () => fallback value.
+All public reads go through useApiFetch (app/shared/composables/useApiFetch.ts) —
+the ONE read primitive. It is a thin useFetch wrapper that injects baseURL,
+auto-unwraps the { success, data } envelope, applies a default, and wires
+getCachedData for SWR. Do NOT hand-roll useFetch with config.public.apiBase +
+manual .data unwrap in composables.
+- Standard envelope: `useApiFetch<ApiSuccess<T>>(path, { key, default })` → data is T.
+- Paginated (need meta): pass `transform: (res) => res` + widen the data generic to
+  `ApiPaginated<T> | null`, and `getCachedData: undefined` for reactive page lists.
+Writes (POST/PATCH/DELETE) are NOT done here — a separate authenticated `$admin`
+client is introduced in the dashboard phase.
 
 ### Animations
 import { animate, stagger } from 'motion'
@@ -68,3 +75,21 @@ When adding a new module:
 - npm run typecheck → zero errors
 - npm run lint → zero errors
 - All 4 states built: loading (skeleton), error, empty, populated
+
+## Known exceptions
+
+These two spots legitimately break the rules above. They are the ONLY sanctioned
+violations — do not add more, and do not "fix" these.
+
+1. **`dark:` variants in `app/components/ui/`** — shadcn-vue generates its
+   components with `dark:` variant classes upstream. These files are vendored as-is
+   from the CLI (`npx shadcn-vue@latest add ...`) and are not hand-authored. The
+   `dark:` classes are inert here (there is no light theme / `.dark` toggle), so they
+   have no effect. Do not hand-edit them to strip `dark:`; the next CLI update would
+   reintroduce them. The "never use `dark:`" rule applies to OUR code, not vendored ui/.
+
+2. **Hardcoded hex in `app/pages/resume.vue` print stylesheet** — the `@media print`
+   block intentionally uses literal hex (e.g. `#18181b` ink on `#ffffff`) because
+   printed/PDF resumes must be black-on-white regardless of the dark screen theme.
+   Semantic dark tokens would render an unreadable/ink-heavy page. This is scoped to
+   the print stylesheet only; the on-screen resume uses semantic tokens like everything else.
