@@ -13,8 +13,8 @@ export function useHeroContent() {
   );
   const heroSubtitle = computed(
     () =>
-      settings.value?.heroSubtitle?.trim()
-      || 'Software engineer crafting fast, accessible, and beautifully animated digital experiences.',
+      settings.value?.heroSubtitle?.trim() ||
+      'Software engineer crafting fast, accessible, and beautifully animated digital experiences.',
   );
   const availableForWork = computed(() => settings.value?.availableForWork ?? false);
 
@@ -51,7 +51,7 @@ export function useHeroStats() {
     for (const group of resume.value?.skillGroups ?? []) {
       for (const skill of group.skills) {
         if (out.length >= 6) break;
-        out.push(skill);
+        out.push(skill.name);
       }
     }
     return out;

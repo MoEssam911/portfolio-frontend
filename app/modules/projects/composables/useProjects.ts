@@ -5,13 +5,11 @@ export function useProjects(limit = 10) {
   const config = useRuntimeConfig();
   const apiBase = config.public.apiBase as string;
 
-  const { data, pending, error } = useFetch<ApiPaginated<Project>>(
-    `${apiBase}/projects`,
-    {
-      key: 'projects-list',
-      query: { page: 1, limit },
-    },
-  );
+  const { data, pending, error } = useFetch<ApiPaginated<Project>>(`${apiBase}/projects`, {
+    key: 'projects-list',
+    query: { page: 1, limit },
+    getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
+  });
 
   const featuredProjects = computed<Project[]>(
     () => data.value?.data.filter((p) => p.featured) ?? [],

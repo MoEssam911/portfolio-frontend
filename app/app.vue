@@ -25,7 +25,12 @@ useHead({
   link: [
     { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
     { rel: 'canonical', href: canonical },
-    { rel: 'alternate', type: 'application/rss+xml', title: `${appName} — Blog`, href: '/feed.xml' },
+    {
+      rel: 'alternate',
+      type: 'application/rss+xml',
+      title: `${appName} — Blog`,
+      href: '/feed.xml',
+    },
   ],
 });
 
@@ -47,6 +52,12 @@ useSeoMeta({
        including portalled overlays (Dialog/Sheet/Popover/Select/Tooltip). -->
   <ConfigProvider dir="ltr">
     <TooltipProvider :delay-duration="200">
+      <NuxtLoadingIndicator
+        color="var(--color-primary)"
+        :height="2"
+        :duration="3000"
+        :throttle="200"
+      />
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>

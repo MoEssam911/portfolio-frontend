@@ -13,10 +13,14 @@ export function usePost(slug: MaybeRefOrGetter<string>) {
   const config = useRuntimeConfig();
   const apiBase = config.public.apiBase as string;
 
-  const { data: _raw, pending, error } = useFetch<ApiSuccess<BlogPost>>(
-    () => `${apiBase}/blogs/${toValue(slug)}`,
-    { key: () => `post-${toValue(slug)}` },
-  );
+  const {
+    data: _raw,
+    pending,
+    error,
+  } = useFetch<ApiSuccess<BlogPost>>(() => `${apiBase}/blogs/${toValue(slug)}`, {
+    key: () => `post-${toValue(slug)}`,
+    getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
+  });
 
   const post = computed<ComputedBlogPost | null>(() => {
     if (!_raw.value?.data) return null;

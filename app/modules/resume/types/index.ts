@@ -22,10 +22,16 @@ export interface Education {
   order: number;
 }
 
+export interface SkillItem {
+  name: string;
+  icon?: string;
+}
+
 export interface SkillGroup {
   id: string;
   name: string;
-  skills: string[];
+  icon?: string;
+  skills: SkillItem[];
   order: number;
 }
 

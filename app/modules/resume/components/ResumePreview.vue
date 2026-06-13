@@ -52,7 +52,12 @@ const links = computed(() => byOrder(resume.value?.links));
 const contactItems = computed(() => {
   const items: { label: string; href: string; icon: string; external: boolean }[] = [];
   if (email.value) {
-    items.push({ label: email.value, href: `mailto:${email.value}`, icon: 'lucide:mail', external: false });
+    items.push({
+      label: email.value,
+      href: `mailto:${email.value}`,
+      icon: 'lucide:mail',
+      external: false,
+    });
   }
   for (const link of links.value) {
     items.push({ label: link.label, href: link.url, icon: 'lucide:link', external: true });
@@ -79,7 +84,10 @@ const certRange = (issue: string | null, expiry: string | null) =>
 
 <template>
   <!-- Loading -->
-  <div v-if="showSkeleton" class="flex flex-col gap-8 rounded-3xl border border-border bg-card p-8 sm:p-12">
+  <div
+    v-if="showSkeleton"
+    class="flex flex-col gap-8 rounded-3xl border border-border bg-card p-8 sm:p-12"
+  >
     <div class="flex flex-col gap-3">
       <Skeleton class="h-9 w-64" />
       <Skeleton class="h-5 w-80" />
@@ -89,10 +97,7 @@ const certRange = (issue: string | null, expiry: string | null) =>
   </div>
 
   <!-- Error -->
-  <div
-    v-else-if="error"
-    class="rounded-3xl border border-border bg-card p-12 text-center"
-  >
+  <div v-else-if="error" class="rounded-3xl border border-border bg-card p-12 text-center">
     <Icon name="lucide:triangle-alert" class="mx-auto size-6 text-muted-foreground" />
     <p class="mt-3 text-sm text-muted-foreground">Couldn't load the résumé right now.</p>
   </div>
@@ -174,7 +179,7 @@ const certRange = (issue: string | null, expiry: string | null) =>
         <div v-for="group in skillGroups" :key="group.id" class="flex flex-col gap-3">
           <h3 class="font-display text-base text-foreground">{{ group.name }}</h3>
           <div class="flex flex-wrap gap-2">
-            <SkillBadge v-for="skill in group.skills" :key="skill" :label="skill" />
+            <SkillBadge v-for="skill in group.skills" :key="skill.name" :label="skill.name" />
           </div>
         </div>
       </div>
@@ -184,11 +189,7 @@ const certRange = (issue: string | null, expiry: string | null) =>
     <section v-if="certifications.length" class="flex flex-col gap-6">
       <p class="label text-primary">Certifications</p>
       <ul class="flex flex-col gap-4">
-        <li
-          v-for="cert in certifications"
-          :key="cert.id"
-          class="flex flex-col gap-0.5"
-        >
+        <li v-for="cert in certifications" :key="cert.id" class="flex flex-col gap-0.5">
           <div class="flex items-baseline justify-between gap-4">
             <component
               :is="cert.url ? 'a' : 'span'"
@@ -199,7 +200,11 @@ const certRange = (issue: string | null, expiry: string | null) =>
               :class="cert.url && 'transition-colors hover:text-primary'"
             >
               {{ cert.name }}
-              <Icon v-if="cert.url" name="lucide:external-link" class="ml-1 inline size-3.5 align-baseline text-muted-foreground" />
+              <Icon
+                v-if="cert.url"
+                name="lucide:external-link"
+                class="ml-1 inline size-3.5 align-baseline text-muted-foreground"
+              />
             </component>
             <span
               v-if="certRange(cert.issueDate, cert.expiryDate)"

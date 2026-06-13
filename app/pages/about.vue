@@ -18,7 +18,10 @@ const availableForWork = computed(() => settings.value?.availableForWork ?? fals
 const bioParagraphs = computed(() => {
   const text = settings.value?.about?.trim() || '';
   if (!text) return [];
-  return text.split(/\n\s*\n/).map((p) => p.replace(/\s*\n\s*/g, ' ').trim()).filter(Boolean);
+  return text
+    .split(/\n\s*\n/)
+    .map((p) => p.replace(/\s*\n\s*/g, ' ').trim())
+    .filter(Boolean);
 });
 const showBioSkeleton = computed(() => settingsPending.value && !settings.value);
 
@@ -26,7 +29,7 @@ const showBioSkeleton = computed(() => settingsPending.value && !settings.value)
 const stack = computed(() => {
   const set = new Set<string>();
   for (const group of resume.value?.skillGroups ?? []) {
-    for (const skill of group.skills) set.add(skill);
+    for (const skill of group.skills) set.add(skill.name);
   }
   return [...set];
 });
@@ -70,8 +73,8 @@ useSeo({
 // Person JSON-LD — richer than the home page (job title + location).
 const personLd = computed(() => {
   const s = settings.value;
-  const sameAs = [s?.githubUrl, s?.linkedinUrl, s?.twitterUrl].filter(
-    (v): v is string => Boolean(v),
+  const sameAs = [s?.githubUrl, s?.linkedinUrl, s?.twitterUrl].filter((v): v is string =>
+    Boolean(v),
   );
   return {
     '@context': 'https://schema.org',
@@ -81,7 +84,9 @@ const personLd = computed(() => {
     description: s?.about || s?.siteDescription || undefined,
     url: `${url.origin}/about`,
     email: email.value || undefined,
-    ...(location.value ? { address: { '@type': 'PostalAddress', addressLocality: location.value } } : {}),
+    ...(location.value
+      ? { address: { '@type': 'PostalAddress', addressLocality: location.value } }
+      : {}),
     ...(sameAs.length > 0 ? { sameAs } : {}),
   };
 });
@@ -170,8 +175,8 @@ useHead({
       </div>
     </Section>
 
-    <!-- Skills (full, grouped) — reuse the home showcase. -->
-    <SkillsShowcase />
+    <!-- Skills — interactive orbital visualization. -->
+    <SkillsOrbit />
 
     <!-- Stack — flat, de-duplicated technology cloud. -->
     <Section label="Tooling" title="The stack" class="bg-card/30">

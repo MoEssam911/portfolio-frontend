@@ -20,8 +20,8 @@ useSeoMeta({
 // JSON-LD graph — the site owner (Person) plus the site itself (WebSite).
 const personLd = computed(() => {
   const s = settings.value;
-  const sameAs = [s?.githubUrl, s?.linkedinUrl, s?.twitterUrl].filter(
-    (v): v is string => Boolean(v),
+  const sameAs = [s?.githubUrl, s?.linkedinUrl, s?.twitterUrl].filter((v): v is string =>
+    Boolean(v),
   );
 
   return {
@@ -60,6 +60,10 @@ useHead({
 </script>
 
 <template>
+  <!-- LOGO PREVIEW — REMOVE AFTER PICK -->
+  <LogoShowcase />
+  <!-- / LOGO PREVIEW -->
+
   <!-- Home composition — section order mirrors the knowledge base. -->
   <HeroSection />
   <FeaturedWork />

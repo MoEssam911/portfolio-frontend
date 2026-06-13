@@ -12,10 +12,14 @@ export function useProject(slug: MaybeRefOrGetter<string>) {
   const config = useRuntimeConfig();
   const apiBase = config.public.apiBase as string;
 
-  const { data: _raw, pending, error } = useFetch<ApiSuccess<Project>>(
-    () => `${apiBase}/projects/${toValue(slug)}`,
-    { key: () => `project-${toValue(slug)}` },
-  );
+  const {
+    data: _raw,
+    pending,
+    error,
+  } = useFetch<ApiSuccess<Project>>(() => `${apiBase}/projects/${toValue(slug)}`, {
+    key: () => `project-${toValue(slug)}`,
+    getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
+  });
 
   const project = computed<Project | null>(() => _raw.value?.data ?? null);
 

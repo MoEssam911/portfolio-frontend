@@ -50,10 +50,11 @@ useScrollReveal(sectionRef, { selector: '[data-reveal]', stagger: 0.07 });
           <div class="flex flex-wrap gap-2">
             <span
               v-for="skill in group.skills"
-              :key="skill"
-              class="rounded-lg border border-border bg-muted px-2.5 py-1 font-mono text-xs text-muted-foreground transition-colors hover:border-primary-border hover:text-foreground"
+              :key="skill.name"
+              class="inline-flex items-center gap-1.5 rounded-lg border border-border bg-muted px-2.5 py-1 font-mono text-xs text-muted-foreground transition-colors hover:border-primary-border hover:text-foreground"
             >
-              {{ skill }}
+              <Icon v-if="skill.icon" :name="skill.icon" class="size-3.5 shrink-0" />
+              {{ skill.name }}
             </span>
           </div>
         </div>
