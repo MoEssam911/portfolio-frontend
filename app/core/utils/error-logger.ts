@@ -1,4 +1,4 @@
-import type { ApiError } from '~/core/api/types';
+import type { ApiError } from '~/core/api/errors';
 
 export const logError = (err: unknown, ctx: Record<string, unknown> = {}) => {
   if (import.meta.dev) {

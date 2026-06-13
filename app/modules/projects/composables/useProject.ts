@@ -9,19 +9,14 @@ import type { ApiSuccess } from '~/shared/types/api';
  * unpublished slug surfaces as `error` (backend 404).
  */
 export function useProject(slug: MaybeRefOrGetter<string>) {
-  const config = useRuntimeConfig();
-  const apiBase = config.public.apiBase as string;
-
   const {
-    data: _raw,
+    data: project,
     pending,
     error,
-  } = useFetch<ApiSuccess<Project>>(() => `${apiBase}/projects/${toValue(slug)}`, {
+  } = useApiFetch<ApiSuccess<Project>, Project | null>(() => `/projects/${toValue(slug)}`, {
     key: () => `project-${toValue(slug)}`,
-    getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
+    default: () => null,
   });
-
-  const project = computed<Project | null>(() => _raw.value?.data ?? null);
 
   return { project, pending, error };
 }

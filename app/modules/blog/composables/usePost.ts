@@ -10,22 +10,18 @@ import { readingTime } from '~/shared/utils/reading-time';
  * unpublished slug surfaces as `error` (backend 404). Mirrors `useProject`.
  */
 export function usePost(slug: MaybeRefOrGetter<string>) {
-  const config = useRuntimeConfig();
-  const apiBase = config.public.apiBase as string;
-
   const {
-    data: _raw,
+    data: raw,
     pending,
     error,
-  } = useFetch<ApiSuccess<BlogPost>>(() => `${apiBase}/blogs/${toValue(slug)}`, {
+  } = useApiFetch<ApiSuccess<BlogPost>, BlogPost | null>(() => `/blogs/${toValue(slug)}`, {
     key: () => `post-${toValue(slug)}`,
-    getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
+    default: () => null,
   });
 
-  const post = computed<ComputedBlogPost | null>(() => {
-    if (!_raw.value?.data) return null;
-    return { ..._raw.value.data, readingTime: readingTime(_raw.value.data.content) };
-  });
+  const post = computed<ComputedBlogPost | null>(() =>
+    raw.value ? { ...raw.value, readingTime: readingTime(raw.value.content) } : null,
+  );
 
   return { post, pending, error };
 }
