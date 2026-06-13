@@ -64,6 +64,12 @@ jobs:
           esac
 
       - name: Build
+        # NITRO_PRESET must be set HERE: netlify.toml's [build.environment] only
+        # applies to Netlify's own builds, not this GitHub Actions runner. Without
+        # it, `nuxt build` uses the default preset and emits `.output/` instead of
+        # the `dist/` + `.netlify/functions-internal/` that the deploy step expects.
+        env:
+          NITRO_PRESET: netlify
         run: npm run build
 
       - name: Deploy to Netlify
