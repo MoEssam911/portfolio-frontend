@@ -43,11 +43,6 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     '@nuxt/icon',
     '@nuxt/image',
-    // Inspira UI's peer dep — registers <Motion>/<AnimatePresence> components and
-    // the motion-v auto-import resolver. Inspira components live in
-    // app/components/inspira/ (scanned by the ~/components glob above) and are
-    // picked up by Tailwind via the broad `@source` in app/assets/css/main.css.
-    'motion-v/nuxt',
   ],
 
   // Self-hosted Google fonts (downloaded at build, served locally). Matches the

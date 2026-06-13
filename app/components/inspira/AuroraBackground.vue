@@ -3,6 +3,8 @@
 // "Precision" token palette. GPU-friendly: only blurred layers are *translated*
 // (transform/opacity), so the expensive blur rasterises once and is composited
 // each frame. Fully disabled under prefers-reduced-motion.
+import { usePreferredReducedMotion } from '@vueuse/core';
+
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -11,9 +13,9 @@ interface Props {
 
 const props = defineProps<Props>();
 
-// motion-v auto-import: null on server, boolean after client mount.
-const reduced = useReducedMotion();
-const animated = computed(() => reduced.value === false);
+// @vueuse: SSR-safe, 'no-preference' | 'reduce'. Animate only when motion is allowed.
+const preferredMotion = usePreferredReducedMotion();
+const animated = computed(() => preferredMotion.value === 'no-preference');
 </script>
 
 <template>

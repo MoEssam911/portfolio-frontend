@@ -1,3 +1,4 @@
+import { usePreferredReducedMotion } from '@vueuse/core';
 import { animate, stagger } from 'motion';
 import type { Ref } from 'vue';
 
@@ -52,9 +53,10 @@ export function useScrollReveal(target: MaybeElementRef, options: ScrollRevealOp
     rootMargin = '0px 0px -10% 0px',
   } = options;
 
-  // `useReducedMotion` is provided by motion-v (auto-imported) and returns a ref
-  // that is `null` on the server and a boolean once mounted on the client.
-  const reduced = useReducedMotion();
+  // @vueuse's `usePreferredReducedMotion` is SSR-safe and returns
+  // 'no-preference' | 'reduce', resolving to the real value once mounted.
+  const preferredMotion = usePreferredReducedMotion();
+  const reduced = computed(() => preferredMotion.value === 'reduce');
 
   // Server render never animates — final state only.
   if (import.meta.server) return;

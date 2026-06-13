@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { usePreferredReducedMotion } from '@vueuse/core';
+
 import { cn } from '@/lib/utils';
 import type { PostHeading } from '~/modules/blog/composables/usePostContent';
 
@@ -9,7 +11,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const activeId = ref<string | null>(null);
-const reduced = useReducedMotion();
+const preferredMotion = usePreferredReducedMotion();
 
 let observer: IntersectionObserver | null = null;
 
@@ -41,7 +43,7 @@ function scrollTo(id: string, e: MouseEvent) {
   const el = document.getElementById(id);
   if (!el) return;
   const top = el.getBoundingClientRect().top + window.scrollY - 96;
-  window.scrollTo({ top, behavior: reduced.value ? 'auto' : 'smooth' });
+  window.scrollTo({ top, behavior: preferredMotion.value === 'reduce' ? 'auto' : 'smooth' });
   activeId.value = id;
   history.replaceState(null, '', `#${id}`);
 }
@@ -52,7 +54,10 @@ onMounted(async () => {
 });
 
 // Re-observe when a client-side post change swaps the heading set.
-watch(() => props.headings, () => nextTick().then(observe));
+watch(
+  () => props.headings,
+  () => nextTick().then(observe),
+);
 
 onBeforeUnmount(() => observer?.disconnect());
 </script>

@@ -1,3 +1,4 @@
+import { usePreferredReducedMotion } from '@vueuse/core';
 import { animate, stagger } from 'motion';
 import type { Ref } from 'vue';
 
@@ -69,8 +70,9 @@ export function useHeroStats() {
  * `data-hero-reveal`.
  */
 export function useHeroIntro(rootRef: Ref<HTMLElement | undefined>, key: string) {
-  // motion-v auto-import: null on server, boolean once mounted on the client.
-  const reduced = useReducedMotion();
+  // @vueuse: 'no-preference' | 'reduce' (SSR-safe, resolves to the real value on mount).
+  const preferredMotion = usePreferredReducedMotion();
+  const reduced = computed(() => preferredMotion.value === 'reduce');
   const introPlayed = useState(`hero-intro-${key}`, () => false);
 
   onMounted(async () => {
