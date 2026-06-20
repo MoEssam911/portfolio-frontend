@@ -81,3 +81,57 @@ export interface ResumeProfile {
   certifications: Certification[];
   links: ResumeLink[];
 }
+
+// ── Dashboard write payloads ─────────────────────────────────────────────────
+// Each mirrors the backend Create/Update DTO field-for-field (whitelisted keys
+// only — the backend runs `whitelist + forbidNonWhitelisted`). `order` is never
+// part of these payloads: position is owned exclusively by the `/reorder`
+// endpoint of each collection. Optional fields are typed `| null`; the backend
+// `@IsOptional()` validators accept `null`. Dates are `YYYY-MM-DD` strings.
+
+/** PATCH /resume — the singleton profile. `null` clears a field. */
+export interface ResumeProfileInput {
+  headline: string | null;
+  summary: string | null;
+  location: string | null;
+  downloadUrl: string | null;
+}
+
+export interface ExperienceInput {
+  company: string;
+  title: string;
+  location: string | null;
+  startDate: string;
+  endDate: string | null;
+  current: boolean;
+  bullets: string[];
+}
+
+export interface EducationInput {
+  school: string;
+  degree: string;
+  field: string | null;
+  startDate: string | null;
+  endDate: string | null;
+  current: boolean;
+  description: string | null;
+}
+
+export interface SkillGroupInput {
+  name: string;
+  icon: string | null;
+  skills: SkillItem[];
+}
+
+export interface CertificationInput {
+  name: string;
+  issuer: string;
+  issueDate: string | null;
+  expiryDate: string | null;
+  url: string | null;
+}
+
+export interface ResumeLinkInput {
+  label: string;
+  url: string;
+}

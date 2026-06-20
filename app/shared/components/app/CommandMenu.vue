@@ -24,6 +24,25 @@ const { open, hide } = useCommandMenu();
 const config = useRuntimeConfig();
 const apiBase = config.public.apiBase as string;
 
+// Dashboard mode: when an authenticated admin is inside /dashboard, the palette
+// swaps its public site index for dashboard navigation + quick-create actions.
+const route = useRoute();
+const { isAuthenticated } = useAuth();
+const isDashboard = computed(() => route.path.startsWith('/dashboard') && isAuthenticated.value);
+
+const DASH_CREATE: CommandItem[] = [
+  {
+    group: 'Create',
+    label: 'New project',
+    to: '/dashboard/projects/new',
+    icon: 'lucide:folder-plus',
+  },
+  { group: 'Create', label: 'New blog post', to: '/dashboard/blog/new', icon: 'lucide:file-plus' },
+];
+const dashNav = computed<CommandItem[]>(() =>
+  DASHBOARD_NAV.map((n) => ({ group: 'Dashboard', label: n.label, to: n.to, icon: n.icon })),
+);
+
 const query = ref('');
 const activeIndex = ref(0);
 const inputRef = ref<HTMLInputElement>();
@@ -49,7 +68,8 @@ const posts = ref<Array<{ slug: string; title: string }>>([]);
 const loaded = ref(false);
 
 async function loadContent() {
-  if (loaded.value) return;
+  // Dashboard mode is entirely local actions — no public content fetch needed.
+  if (isDashboard.value || loaded.value) return;
   loaded.value = true;
   const [pr, po] = await Promise.allSettled([
     $fetch<{ data: Array<{ slug: string; title: string }> }>(`${apiBase}/projects`, {
@@ -77,6 +97,14 @@ const match = (text: string, q: string) => text.toLowerCase().includes(q.toLower
 // Flat, ordered list — the single source of truth for keyboard indexing.
 const items = computed<CommandItem[]>(() => {
   const q = query.value.trim();
+
+  // Dashboard: quick-create + section navigation, gated to authenticated admins.
+  if (isDashboard.value) {
+    const create = q ? DASH_CREATE.filter((i) => match(i.label, q)) : DASH_CREATE;
+    const sections = q ? dashNav.value.filter((i) => match(i.label, q)) : dashNav.value;
+    return [...create, ...sections];
+  }
+
   const nav = q ? NAV.filter((n) => match(n.label, q)) : NAV;
   const proj = projects.value
     .filter((p) => !q || match(p.title, q))
@@ -114,7 +142,8 @@ const groups = computed(() => {
 });
 
 function clampActive() {
-  if (activeIndex.value >= items.value.length) activeIndex.value = Math.max(0, items.value.length - 1);
+  if (activeIndex.value >= items.value.length)
+    activeIndex.value = Math.max(0, items.value.length - 1);
 }
 watch(query, () => {
   activeIndex.value = 0;
@@ -135,7 +164,8 @@ function onKeydown(e: KeyboardEvent) {
     scrollActiveIntoView();
   } else if (e.key === 'ArrowUp') {
     e.preventDefault();
-    activeIndex.value = (activeIndex.value - 1 + items.value.length) % Math.max(1, items.value.length);
+    activeIndex.value =
+      (activeIndex.value - 1 + items.value.length) % Math.max(1, items.value.length);
     scrollActiveIntoView();
   } else if (e.key === 'Enter') {
     e.preventDefault();
@@ -173,7 +203,9 @@ watch(open, (isOpen) => {
       >
         <VisuallyHidden>
           <DialogTitle>Command menu</DialogTitle>
-          <DialogDescription>Search projects, posts, and pages, then press Enter to go.</DialogDescription>
+          <DialogDescription
+            >Search projects, posts, and pages, then press Enter to go.</DialogDescription
+          >
         </VisuallyHidden>
 
         <!-- Search input -->
@@ -183,7 +215,9 @@ watch(open, (isOpen) => {
             ref="inputRef"
             v-model="query"
             type="text"
-            placeholder="Search projects, posts, pages…"
+            :placeholder="
+              isDashboard ? 'Jump to a section or create…' : 'Search projects, posts, pages…'
+            "
             class="h-12 w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
             autocomplete="off"
             autocorrect="off"
@@ -216,7 +250,7 @@ watch(open, (isOpen) => {
               :data-index="entry.index"
               :class="
                 cn(
-                  'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors',
+                  'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                   entry.index === activeIndex
                     ? 'bg-accent text-foreground'
                     : 'text-muted-foreground hover:bg-muted/60',

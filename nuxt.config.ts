@@ -26,6 +26,8 @@ export default defineNuxtConfig({
       'modules/resume/composables',
       'modules/services/composables',
       'modules/testimonials/composables',
+      'modules/dashboard/composables',
+      'modules/dashboard/stores', // keeps useAuthStore auto-imported
       'stores', // keeps useUiStore auto-imported
       'core/utils', // keeps core/utils helpers auto-imported
       // Add new module composable dirs here as modules are created
@@ -64,10 +66,38 @@ export default defineNuxtConfig({
     },
   },
 
+  // ── Rendering & caching (Phase 10) ──────────────────────────────────────────
+  // Public content pages are universal-SSR + edge SWR so dashboard edits surface
+  // within the TTL while serving instantly from cache. The dashboard is a private,
+  // client-only SPA section that is never SSR'd and never cached. BFF endpoints
+  // carry per-session data and must never be cached anywhere.
+  //
+  // NOTE: the build plan suggested `'/' : { prerender: true }`. We use `swr`
+  // instead — prerender freezes the home hero/settings at build time, which would
+  // stop dashboard Settings edits from ever appearing without a redeploy. SWR keeps
+  // the page dynamic (reflects edits within the window) while still caching. TTLs
+  // are conservative; tune against the running backend if revalidation feels slow.
+  routeRules: {
+    '/': { swr: 3600 },
+    '/blog': { swr: 3600 },
+    '/blog/**': { swr: 3600 },
+    '/projects': { swr: 3600 },
+    '/projects/**': { swr: 3600 },
+    // resume / contact / about are left as plain SSR (no rule) — dynamic, uncached.
+    '/dashboard/**': { ssr: false, headers: { 'cache-control': 'no-store' } },
+    '/api/admin/**': { headers: { 'cache-control': 'no-store' } },
+    '/api/auth/**': { headers: { 'cache-control': 'no-store' } },
+  },
+
   runtimeConfig: {
     // Server-only private keys — NEVER exposed to the browser.
     // Add secrets here: apiSecret, databaseUrl, jwtSecret, etc.
     // Access in server routes via: const { apiSecret } = useRuntimeConfig()
+
+    // Internal/private base URL the dashboard BFF (server/api/**) uses to reach the
+    // backend. Falls back to public.apiBase when unset (see server/utils/bff.ts).
+    // Never exposed to the browser.
+    apiInternalBase: process.env.NUXT_API_INTERNAL_BASE ?? '',
 
     public: {
       // Exposed to both server and client-side code. Never put secrets here.

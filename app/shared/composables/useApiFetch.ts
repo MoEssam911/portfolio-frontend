@@ -45,19 +45,22 @@ import type { ApiPaginated, ApiSuccess } from '~/shared/types/api';
  *   caching (a constant key + reactive `query` must always re-fetch on page change).
  */
 
-type ApiEnvelope = ApiSuccess<unknown> | ApiPaginated<unknown>;
+export type ApiEnvelope = ApiSuccess<unknown> | ApiPaginated<unknown>;
 
 /** Default unwrap: `ApiSuccess<T>` → `T`, `ApiPaginated<T>` → `T[]`. */
-type UnwrapEnvelope<ResT> = ResT extends { data: infer D } ? D : ResT;
+export type UnwrapEnvelope<ResT> = ResT extends { data: infer D } ? D : ResT;
 
 /**
  * Options accepted by {@link useApiFetch}. Mirrors `UseFetchOptions` but re-types
  * `transform`/`default`/`getCachedData` against our resolved `DataT` (Nuxt's own
  * `DefaultT` generic would otherwise pin `default` to `undefined`).
+ *
+ * `baseURL` is opt-in: omit it for public reads (defaults to the backend
+ * `apiBase`); the dashboard reads pass `/api/admin` to route through the BFF.
  */
 export interface UseApiFetchOptions<ResT extends ApiEnvelope, DataT> extends Omit<
   UseFetchOptions<ResT, DataT>,
-  'transform' | 'default' | 'getCachedData' | 'baseURL'
+  'transform' | 'default' | 'getCachedData'
 > {
   transform?: (input: ResT) => DataT;
   default?: () => DataT;
