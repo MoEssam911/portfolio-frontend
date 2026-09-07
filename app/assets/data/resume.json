@@ -1,0 +1,207 @@
+{
+  "id": "1",
+  "headline": "Frontend Developer · Vue · Nuxt · TypeScript",
+  "summary": "Frontend developer with a software-engineering mindset, specializing in Vue, Nuxt, and TypeScript. I build performant, accessible, data-rich web applications — from real-time dashboards to fintech platforms — with a focus on clean architecture and maintainable code.",
+  "location": "Cairo, Egypt",
+  "downloadUrl": null,
+  "experiences": [
+    {
+      "id": "exp-1",
+      "company": "Bevatel",
+      "title": "Frontend Developer",
+      "location": "Dokki, Giza, Egypt (Hybrid)",
+      "startDate": "2025-10-01",
+      "endDate": null,
+      "current": true,
+      "bullets": [
+        "Developing and maintaining a business chat web application, continuously shipping new features and fixes.",
+        "Improved application performance and refined the system design for better scalability and maintainability.",
+        "Collaborate on architecture decisions and own frontend features end to end with an engineer's attention to detail."
+      ],
+      "order": 0
+    },
+    {
+      "id": "exp-2",
+      "company": "Dafa",
+      "title": "Frontend Developer",
+      "location": "Giza, Egypt (On-site)",
+      "startDate": "2024-10-01",
+      "endDate": "2025-10-01",
+      "current": false,
+      "bullets": [
+        "Built Fundex, an investment-fund platform, using Vue and TypeScript, delivering a responsive and intuitive interface for managing fund investments.",
+        "Translated complex fintech requirements into clean, maintainable components with a strong focus on accuracy and data integrity.",
+        "Collaborated within a fintech team to ship features, improve UX, and maintain high code quality across the application."
+      ],
+      "order": 1
+    },
+    {
+      "id": "exp-3",
+      "company": "AI Tech",
+      "title": "Frontend Developer",
+      "location": "6th of October City, Egypt (On-site)",
+      "startDate": "2023-10-01",
+      "endDate": "2024-10-01",
+      "current": false,
+      "bullets": [
+        "Developed frontend interfaces for multiple AI-powered web applications, turning complex data into clear, usable products.",
+        "Built data-rich dashboards with extensive reporting and interactive charts to visualize AI-driven insights.",
+        "Implemented real-time features to deliver live data updates and responsive, dynamic user experiences."
+      ],
+      "order": 2
+    },
+    {
+      "id": "exp-4",
+      "company": "Information Technology Institute (ITI)",
+      "title": "UI/UX Development Intern",
+      "location": "Cairo, Egypt",
+      "startDate": "2023-07-01",
+      "endDate": "2023-10-01",
+      "current": false,
+      "bullets": [
+        "Completed the UI/UX Development Track — a 3-month intensive code camp (ICC) under the Intensive Training Program (ITP) at ITI, Ministry of Communication and Information Technology (MCIT), Cairo University Branch."
+      ],
+      "order": 3
+    }
+  ],
+  "educations": [
+    {
+      "id": "edu-1",
+      "school": "Faculty of Graduate Studies for Statistical Research, Cairo University",
+      "degree": "Computer Science Diploma",
+      "field": "Computer Science",
+      "startDate": "2024-09-01",
+      "endDate": null,
+      "current": true,
+      "description": "Focused on programming, data structures, algorithms, and statistical methods to build strong analytical and technical skills for software development.",
+      "order": 0
+    },
+    {
+      "id": "edu-2",
+      "school": "Faculty of Arts, Cairo University",
+      "degree": "Bachelor's Degree",
+      "field": "Classics Department",
+      "startDate": "2016-09-01",
+      "endDate": "2020-07-01",
+      "current": false,
+      "description": null,
+      "order": 1
+    }
+  ],
+  "skillGroups": [
+    {
+      "id": "sg-languages",
+      "name": "Languages",
+      "icon": "lucide:code-2",
+      "skills": [
+        { "name": "HTML5", "icon": "simple-icons:html5" },
+        { "name": "CSS3", "icon": "simple-icons:css3" },
+        { "name": "JavaScript", "icon": "simple-icons:javascript" },
+        { "name": "TypeScript", "icon": "simple-icons:typescript" }
+      ],
+      "order": 0
+    },
+    {
+      "id": "sg-frameworks",
+      "name": "Frameworks & State",
+      "icon": "lucide:layers",
+      "skills": [
+        { "name": "Vue 3", "icon": "simple-icons:vuedotjs" },
+        { "name": "Nuxt", "icon": "simple-icons:nuxt" },
+        { "name": "React", "icon": "simple-icons:react" },
+        { "name": "Pinia", "icon": "simple-icons:pinia" },
+        { "name": "TanStack Query", "icon": "simple-icons:reactquery" }
+      ],
+      "order": 1
+    },
+    {
+      "id": "sg-styling-ui",
+      "name": "Styling & UI",
+      "icon": "lucide:palette",
+      "skills": [
+        { "name": "Tailwind CSS", "icon": "simple-icons:tailwindcss" },
+        { "name": "SCSS / SASS", "icon": "simple-icons:sass" },
+        { "name": "PostCSS", "icon": "simple-icons:postcss" },
+        { "name": "Vuetify", "icon": "simple-icons:vuetify" },
+        { "name": "shadcn-vue", "icon": "simple-icons:shadcnui" },
+        { "name": "Headless UI", "icon": "simple-icons:headlessui" }
+      ],
+      "order": 2
+    },
+    {
+      "id": "sg-animation",
+      "name": "Animation & Motion",
+      "icon": "lucide:sparkles",
+      "skills": [
+        { "name": "Motion", "icon": "simple-icons:framer" },
+        { "name": "GSAP", "icon": "simple-icons:greensock" },
+        { "name": "Lenis", "icon": "lucide:mouse" }
+      ],
+      "order": 3
+    },
+    {
+      "id": "sg-apis-backend",
+      "name": "APIs & Backend",
+      "icon": "lucide:server",
+      "skills": [
+        { "name": "REST APIs", "icon": "lucide:webhook" },
+        { "name": "WebSockets", "icon": "lucide:radio-tower" },
+        { "name": "Node.js", "icon": "simple-icons:nodedotjs" },
+        { "name": "Express", "icon": "simple-icons:express" },
+        { "name": "NestJS", "icon": "simple-icons:nestjs" },
+        { "name": "Prisma", "icon": "simple-icons:prisma" },
+        { "name": "PostgreSQL", "icon": "simple-icons:postgresql" },
+        { "name": "axios", "icon": "simple-icons:axios" },
+        { "name": "Swagger", "icon": "simple-icons:swagger" },
+        { "name": "JWT", "icon": "simple-icons:jsonwebtokens" }
+      ],
+      "order": 4
+    },
+    {
+      "id": "sg-tooling-testing",
+      "name": "Build & Testing",
+      "icon": "lucide:wrench",
+      "skills": [
+        { "name": "Vite", "icon": "simple-icons:vite" },
+        { "name": "Webpack", "icon": "simple-icons:webpack" },
+        { "name": "npm", "icon": "simple-icons:npm" },
+        { "name": "pnpm", "icon": "simple-icons:pnpm" },
+        { "name": "ESLint", "icon": "simple-icons:eslint" },
+        { "name": "Prettier", "icon": "simple-icons:prettier" },
+        { "name": "Vitest", "icon": "simple-icons:vitest" },
+        { "name": "Playwright", "icon": "simple-icons:playwright" },
+        { "name": "Storybook", "icon": "simple-icons:storybook" }
+      ],
+      "order": 5
+    },
+    {
+      "id": "sg-version-control",
+      "name": "Version Control & Deploy",
+      "icon": "lucide:git-branch",
+      "skills": [
+        { "name": "Git", "icon": "simple-icons:git" },
+        { "name": "GitHub", "icon": "simple-icons:github" },
+        { "name": "GitLab", "icon": "simple-icons:gitlab" },
+        { "name": "GitHub Actions", "icon": "simple-icons:githubactions" },
+        { "name": "Vercel", "icon": "simple-icons:vercel" },
+        { "name": "Netlify", "icon": "simple-icons:netlify" }
+      ],
+      "order": 6
+    },
+    {
+      "id": "sg-performance-quality",
+      "name": "Performance & Quality",
+      "icon": "lucide:gauge",
+      "skills": [
+        { "name": "Lighthouse", "icon": "simple-icons:lighthouse" },
+        { "name": "Core Web Vitals", "icon": "lucide:activity" },
+        { "name": "PWA", "icon": "lucide:smartphone" },
+        { "name": "Accessibility (WCAG)", "icon": "lucide:accessibility" },
+        { "name": "Figma", "icon": "simple-icons:figma" }
+      ],
+      "order": 7
+    }
+  ],
+  "certifications": [],
+  "links": []
+}

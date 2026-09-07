@@ -1,0 +1,44 @@
+[
+  {
+    "title": "From Concept to Launch",
+    "description": "I take projects from a rough idea to a deployed, production-ready product — planning, building, testing, and shipping a polished result that's ready to use, not just a prototype.",
+    "icon": "lucide:rocket",
+    "featured": true,
+    "order": 0
+  },
+  {
+    "title": "Frontend Web Development",
+    "description": "I build fast, accessible web applications with Vue, Nuxt, and TypeScript. From architecture to ship, I own features end to end with an engineer's attention to clean, maintainable code.",
+    "icon": "lucide:code-2",
+    "featured": true,
+    "order": 1
+  },
+  {
+    "title": "Dashboards & Data Visualization",
+    "description": "I turn complex data into clear, usable products — data-rich dashboards with interactive charts and reporting that make insights easy to read and act on.",
+    "icon": "lucide:layout-dashboard",
+    "featured": true,
+    "order": 2
+  },
+  {
+    "title": "Real-Time Applications",
+    "description": "I implement live, responsive experiences — real-time updates, chat, and streaming data — so interfaces stay in sync without a refresh.",
+    "icon": "lucide:radio",
+    "featured": true,
+    "order": 3
+  },
+  {
+    "title": "UI/UX Engineering",
+    "description": "I translate designs into pixel-accurate, accessible interfaces with smooth motion and a strong focus on usability across devices.",
+    "icon": "lucide:palette",
+    "featured": true,
+    "order": 4
+  },
+  {
+    "title": "Performance & Code Quality",
+    "description": "I profile and optimize web apps for speed and scalability, refactoring toward clean architecture and a maintainable, well-tested codebase.",
+    "icon": "lucide:gauge",
+    "featured": true,
+    "order": 5
+  }
+]

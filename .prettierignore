@@ -1,0 +1,13 @@
+.nuxt
+.output
+dist
+node_modules
+coverage
+package-lock.json
+HTML Design
+
+# Vendored shadcn-vue components — kept pristine from the CLI.
+app/components/ui
+
+# Hand-authored knowledge-base / docs — not machine-formatted.
+*.md

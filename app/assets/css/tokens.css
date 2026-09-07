@@ -1,0 +1,368 @@
+/* Dark-only design system. Dark IS the default. Never add .dark class or dark: variants. */
+
+/* ═════════════════════════════════════════════════════════════════════
+   PORTFOLIO DESIGN TOKENS  (single source of truth)
+   Direction: "Terminal Lime" — futuristic glass + neon glow, dark-only.
+   Neon lime (#C6F432) on a near-black cool base, with glass surfaces.
+
+   ARCHITECTURE (read before editing):
+     LAYER 1 — Primitive palette  ·  raw color values, the ONLY place hex lives.
+     LAYER 2 — Semantic tokens    ·  the @theme block; every value is a
+                                     var(--primitive). These generate the
+                                     Tailwind v4 utilities components consume
+                                     (bg-background, text-foreground, bg-primary…).
+
+   → To re-theme the entire app, edit LAYER 1 values only. Never hardcode a
+     hex / rgba / arbitrary shadow in a component — add a token here instead.
+   → Components use semantic utilities only: bg-background, text-foreground,
+     bg-card, bg-muted, text-destructive, bg-primary-subtle, etc.
+
+   THEME: single dark theme. :root IS the dark theme — there is no light mode,
+   no `.dark` class, and no `dark:` variants anywhere in the app.
+═════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────
+   LAYER 1 — PRIMITIVE PALETTE  (raw values — single source of truth)
+───────────────────────────────────────────────────────────────────── */
+:root {
+  --white: #ffffff;
+  --black: #000000;
+
+  /* ── Lime (neon brand accent) — signature color, used sparingly ──
+     High-luminance. CTA buttons on lime use DARK ink (--neutral-950).
+     NEVER use lime for body text — accent text uses --lime-300 / foreground. */
+  --lime-50: #f6ffd6;
+  --lime-100: #ecffad; /* faint wash text                    */
+  --lime-200: #e0ff85;
+  --lime-300: #d7f95e; /* accent tone on dark bg (links/text) */
+  --lime-400: #cdf63f;
+  --lime-500: #c6f432; /* DEFAULT primary — neon lime         */
+  --lime-600: #b4e61e; /* hover                               */
+  --lime-700: #a3c400; /* active / pressed                    */
+  --lime-800: #7ccf00; /* deep — signature gradient stop      */
+  --lime-900: #5e9400;
+
+  /* ── Cool near-black surfaces → text (slight blue cast) ── */
+  --neutral-950: #08090b; /* page background — deepest base layer   */
+  --neutral-925: #0b0d11; /* elevated background                    */
+  --neutral-900: #0e1116; /* cards, primary containers              */
+  --neutral-850: #13161c; /* muted surface, hover                   */
+  --neutral-800: #181c24; /* further elevation, interactive hover   */
+  --neutral-750: #1e232c; /* highest elevation — dropdowns/tooltips */
+  --neutral-700: #2a2f3a; /* solid border (fallback)                */
+  --neutral-600: #3a404d; /* hover/focus border, disabled text      */
+  --neutral-500: #545b68; /* strong border, muted text/placeholder  */
+  --neutral-400: #6b7280; /* tertiary text — captions, metadata     */
+  --neutral-300: #9aa0a6; /* secondary text — body, descriptions    */
+  --neutral-200: #c4c9ce;
+  --neutral-100: #f2f4f0; /* primary text — headings, key content   */
+
+  /* ── Status ramps (base / accessible ink on dark / soft tint bg) ── */
+  --green-500: #10b981;
+  --green-ink: #34d399; /* accessible green text on dark         */
+  --green-soft: rgba(16, 185, 129, 0.1);
+
+  --amber-500: #f59e0b;
+  --amber-ink: #fcd34d;
+  --amber-soft: rgba(245, 158, 11, 0.1);
+
+  --red-500: #ef4444;
+  --red-ink: #f87171;
+  --red-soft: rgba(239, 68, 68, 0.1);
+
+  --blue-500: #3b82f6;
+  --blue-ink: #60a5fa;
+  --blue-soft: rgba(59, 130, 246, 0.1);
+
+  /* ── Lime tints (brand-tinted backgrounds & glows) ── */
+  --lime-subtle: rgba(198, 244, 50, 0.06); /* hover states, selections   */
+  --lime-muted: rgba(198, 244, 50, 0.1); /* slightly stronger tint       */
+  --lime-wash: rgba(198, 244, 50, 0.14); /* active / selected — "dim"    */
+  --lime-line: rgba(198, 244, 50, 0.22); /* tinted borders — badges      */
+  --lime-glow: rgba(198, 244, 50, 0.18); /* box-shadow glow base         */
+
+  /* Elevation ink (drop-shadow base color) — pure black for depth on dark */
+  --shadow-ink: 0 0 0; /* rgb() channels */
+
+  /* ── Glass + neon primitives (futuristic glass surfaces & lime glow) ──
+     Consumed by the .glass-surface / .neon-glow utilities and semantic tokens.
+     Glass = translucent fill + hairline highlight + blur; neon = lime halo. */
+  --glass-bg: rgba(255, 255, 255, 0.03); /* default frosted panel fill     */
+  --glass-bg-strong: rgba(255, 255, 255, 0.06); /* denser / hovered glass   */
+  --glass-border: rgba(255, 255, 255, 0.08); /* hairline glass edge         */
+  --glass-highlight: rgba(255, 255, 255, 0.12); /* top inner light catch    */
+  --glass-blur: 14px; /* backdrop-filter blur radius                        */
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45); /* glass drop shadow      */
+
+  /* Neon lime glow — hover halos on interactive/key elements */
+  --shadow-neon:
+    0 0 0 1px var(--lime-line), 0 0 24px var(--lime-glow), 0 0 48px rgba(198, 244, 50, 0.1);
+  --shadow-neon-soft: 0 0 20px rgba(198, 244, 50, 0.12);
+
+  /* Signature mono-hue gradient — lime → deep lime */
+  --gradient-signature: linear-gradient(120deg, #c6f432, #7ccf00);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   LAYER 2 — SEMANTIC TOKENS  (@theme → Tailwind utilities)
+   No raw hex below this line. Reference LAYER 1 primitives only.
+───────────────────────────────────────────────────────────────────── */
+@theme {
+  /* ── Surfaces & text ── */
+  --color-background: var(--neutral-950, #08090b);
+  --color-background-elevated: var(--neutral-925, #0b0d11);
+  --color-foreground: var(--neutral-100, #f2f4f0);
+  --color-card: var(--neutral-900, #0e1116);
+  --color-card-foreground: var(--neutral-100, #f2f4f0);
+  --color-popover: var(--neutral-750, #1e232c);
+  --color-popover-foreground: var(--neutral-100, #f2f4f0);
+  --color-muted: var(--neutral-850, #13161c);
+  --color-muted-foreground: var(--neutral-300, #9aa0a6);
+  --color-subtle: var(--neutral-400, #6b7280);
+
+  /* ── Lines & focus ── */
+  --color-border: var(--glass-border, rgba(255, 255, 255, 0.08));
+  --color-border-strong: var(--neutral-500, #545b68);
+  --color-input: var(--glass-border, rgba(255, 255, 255, 0.08));
+  --color-ring: var(--lime-500, #c6f432);
+
+  /* ── Primary (neon lime) — DEFAULT + full scale for gradients/charts ──
+     CTA buttons use --color-primary-foreground (DARK ink) on lime. */
+  --color-primary: var(--lime-500, #c6f432);
+  --color-primary-foreground: var(--neutral-950, #08090b);
+  --color-primary-hover: var(--lime-600, #b4e61e);
+  --color-primary-active: var(--lime-700, #a3c400);
+  --color-primary-light: var(--lime-300, #d7f95e); /* accent text on dark */
+  --color-primary-50: var(--lime-50, #f6ffd6);
+  --color-primary-100: var(--lime-100, #ecffad);
+  --color-primary-200: var(--lime-200, #e0ff85);
+  --color-primary-300: var(--lime-300, #d7f95e);
+  --color-primary-400: var(--lime-400, #cdf63f);
+  --color-primary-500: var(--lime-500, #c6f432);
+  --color-primary-600: var(--lime-600, #b4e61e);
+  --color-primary-700: var(--lime-700, #a3c400);
+  --color-primary-800: var(--lime-800, #7ccf00);
+  --color-primary-900: var(--lime-900, #5e9400);
+
+  /* ── Brand-tinted backgrounds (lime wash — use sparingly) ── */
+  --color-primary-subtle: var(--lime-subtle);
+  --color-primary-muted: var(--lime-muted);
+  --color-primary-wash: var(--lime-wash);
+  --color-primary-border: var(--lime-line);
+
+  /* ── Accent — shadcn "interactive hover" surface (neutral, NOT brand) ── */
+  --color-accent: var(--neutral-800, #181c24);
+  --color-accent-foreground: var(--neutral-100, #f2f4f0);
+
+  /* ── Secondary — elevated neutral surface (shadcn convention) ── */
+  --color-secondary: var(--neutral-850, #13161c);
+  --color-secondary-foreground: var(--neutral-100, #f2f4f0);
+  --color-secondary-dark: var(--neutral-800, #181c24);
+
+  /* ── Glass surfaces (semantic bridge to glass primitives) ── */
+  --color-glass: var(--glass-bg, rgba(255, 255, 255, 0.03));
+  --color-glass-strong: var(--glass-bg-strong, rgba(255, 255, 255, 0.06));
+
+  /* ── Status: Success ── */
+  --color-success: var(--green-500, #10b981);
+  --color-success-foreground: var(--neutral-950, #0a0a0b);
+  --color-success-muted: var(--green-soft);
+  --color-success-muted-foreground: var(--green-ink, #34d399);
+
+  /* ── Status: Warning ── */
+  --color-warning: var(--amber-500, #f59e0b);
+  --color-warning-foreground: var(--neutral-950, #0a0a0b);
+  --color-warning-muted: var(--amber-soft);
+  --color-warning-muted-foreground: var(--amber-ink, #fcd34d);
+
+  /* ── Status: Destructive (danger) ── */
+  --color-destructive: var(--red-500, #ef4444);
+  --color-destructive-foreground: var(--white, #ffffff);
+  --color-destructive-muted: var(--red-soft);
+  --color-destructive-muted-foreground: var(--red-ink, #f87171);
+
+  /* ── Status: Info ── */
+  --color-info: var(--blue-500, #3b82f6);
+  --color-info-foreground: var(--white, #ffffff);
+  --color-info-muted: var(--blue-soft);
+  --color-info-muted-foreground: var(--blue-ink, #60a5fa);
+
+  /* ── Charts ── */
+  --color-chart-1: var(--color-primary, #c6f432);
+  --color-chart-2: var(--color-success, #10b981);
+  --color-chart-3: var(--color-info, #3b82f6);
+  --color-chart-4: var(--color-warning, #f59e0b);
+  --color-chart-5: var(--color-destructive, #ef4444);
+
+  /* ── Typography — font families ── */
+  --font-sans: 'Geist', Inter, system-ui, -apple-system, sans-serif;
+  --font-display: 'Space Grotesk', Syne, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace;
+  --font-heading: var(--font-display);
+
+  /* ── Type scale — UI text (fixed) + display (fluid clamp) ──────────────
+     UI sizes stay crisp at fixed rem; display tiers scale fluidly between
+     mobile and desktop without breakpoint jumps. Format: clamp(min, pref, max). */
+
+  /* Display — hero headlines, section titles */
+  --text-7xl: clamp(3.5rem, 6vw + 1rem, 7rem); /* 56 → 112px */
+  --text-7xl--line-height: 1.05;
+  --text-7xl--letter-spacing: -0.05em;
+  --text-6xl: clamp(2.75rem, 4.5vw + 1rem, 5rem); /* 44 → 80px */
+  --text-6xl--line-height: 1.05;
+  --text-6xl--letter-spacing: -0.04em;
+  --text-5xl: clamp(2.25rem, 3.5vw + 1rem, 4rem); /* 36 → 64px */
+  --text-5xl--line-height: 1.1;
+  --text-5xl--letter-spacing: -0.03em;
+  --text-4xl: clamp(1.875rem, 2.5vw + 1rem, 3rem); /* 30 → 48px */
+  --text-4xl--line-height: 1.15;
+  --text-4xl--letter-spacing: -0.02em;
+  --text-3xl: clamp(1.5rem, 2vw + 0.5rem, 2.25rem); /* 24 → 36px */
+  --text-3xl--line-height: 1.2;
+  --text-3xl--letter-spacing: -0.02em;
+
+  /* Body / UI text — fixed */
+  --text-2xl: 1.5rem; /* 24px */
+  --text-2xl--line-height: 1.3;
+  --text-xl: 1.25rem; /* 20px */
+  --text-xl--line-height: 1.4;
+  --text-lg: 1.125rem; /* 18px */
+  --text-lg--line-height: 1.55;
+  --text-base: 1rem; /* 16px — default body */
+  --text-base--line-height: 1.65;
+  --text-sm: 0.875rem; /* 14px — secondary content, labels */
+  --text-sm--line-height: 1.5;
+  --text-xs: 0.75rem; /* 12px — metadata, captions */
+  --text-xs--line-height: 1.4;
+  --text-2xs: 0.6875rem; /* 11px — micro labels, badge counters */
+  --text-2xs--line-height: 1.2;
+
+  /* Semantic UI-chrome sizes (kept for admin Base* components) */
+  --text-display: 1.75rem;
+  --text-display--line-height: 2.125rem;
+  --text-h1: 1.5rem;
+  --text-h1--line-height: 1.875rem;
+  --text-h2: 1.25rem;
+  --text-h2--line-height: 1.625rem;
+  --text-h3: 1.0625rem;
+  --text-h3--line-height: 1.5rem;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.375rem;
+  --text-label: 0.625rem; /* 10px */
+  --text-label--line-height: 0.875rem;
+  --text-caption: 0.5625rem; /* 9px */
+  --text-caption--line-height: 0.75rem;
+
+  /* ── Font weights — never exceed 700 (heavier rarely refined on screen) ── */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ── Letter spacing — tight on display, loose only for small caps ── */
+  --tracking-tightest: -0.05em; /* massive display (7xl/6xl) */
+  --tracking-tighter: -0.03em; /* h1, page titles           */
+  --tracking-tight: -0.02em; /* h2, h3, card titles         */
+  --tracking-normal: 0em; /* body — never track body text   */
+  --tracking-wide: 0.03em; /* small labels                  */
+  --tracking-wider: 0.06em; /* uppercase nav                */
+  --tracking-widest: 0.1em; /* badges, ALL-CAPS metadata    */
+
+  /* ── Line heights ── */
+  --leading-none: 1;
+  --leading-tight: 1.1;
+  --leading-snug: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+  --leading-loose: 1.8;
+
+  /* ── Border radius ── */
+  --radius-xs: 0.125rem; /* 2px  */
+  --radius-sm: 0.25rem; /* 4px — tags, chips    */
+  --radius-md: 0.5rem; /* 8px — buttons, inputs */
+  --radius-lg: 0.75rem; /* 12px — cards, panels */
+  --radius-xl: 1rem; /* 16px — modals, drawers */
+  --radius-2xl: 1.5rem; /* 24px — feature cards  */
+  --radius-3xl: 2rem; /* 32px — hero elements   */
+  --radius-full: 9999px;
+
+  /* ── Shadows — elevation via dark shadow; lime glow for key CTAs only ── */
+  --shadow-sm: 0 1px 2px rgb(var(--shadow-ink) / 0.4);
+  --shadow-md: 0 4px 12px rgb(var(--shadow-ink) / 0.45);
+  --shadow-lg: 0 12px 32px rgb(var(--shadow-ink) / 0.55);
+  --shadow-xl: 0 24px 64px rgb(var(--shadow-ink) / 0.6);
+  --shadow-modal: 0 32px 80px rgb(var(--shadow-ink) / 0.7);
+  /* Neon lime glow — primary CTAs, focused inputs, hovered key elements */
+  --shadow-glow: 0 0 0 1px var(--lime-line), 0 0 24px var(--lime-glow);
+  --shadow-glow-strong: 0 0 0 1px var(--lime-line), 0 0 48px rgba(198, 244, 50, 0.28);
+  --shadow-cta: 0 6px 24px color-mix(in srgb, var(--color-primary) 30%, transparent);
+  --shadow-primary: 0 6px 24px color-mix(in srgb, var(--color-primary) 30%, transparent);
+  --shadow-success: 0 6px 24px color-mix(in srgb, var(--color-success) 22%, transparent);
+  --shadow-warning: 0 6px 24px color-mix(in srgb, var(--color-warning) 22%, transparent);
+  --shadow-danger: 0 6px 24px color-mix(in srgb, var(--color-destructive) 22%, transparent);
+
+  /* ── Motion easings (utility-generating: ease-out, ease-spring…) ── */
+  --ease-out: cubic-bezier(0, 0, 0.2, 1); /* standard UI       */
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1); /* modals, drawers */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* playful, bouncy */
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1); /* page transitions */
+}
+
+/* Non-utility tokens (consumed in raw CSS / arbitrary values, not as utilities). */
+:root {
+  /* shadcn non-color bridge — components read bare var(--radius). */
+  --radius: var(--radius-lg);
+
+  /* ── Motion durations — pair every duration with a matching easing ── */
+  --duration-instant: 50ms;
+  --duration-fast: 150ms; /* hover states, small feedback */
+  --duration-normal: 250ms; /* most UI transitions        */
+  --duration-slow: 400ms; /* scroll-triggered, modal      */
+  --duration-slower: 600ms; /* page sections, hero entrance */
+  --duration-cinematic: 1000ms; /* full-section moments     */
+
+  /* Stagger delay — list/grid entrance animations */
+  --stagger-fast: 40ms;
+  --stagger-normal: 60ms;
+  --stagger-slow: 80ms;
+
+  /* Gradients — neon lime bloom on near-black. Glass + glow aesthetic. */
+  --gradient-hero: radial-gradient(
+    ellipse 80% 50% at 50% 0%,
+    rgba(198, 244, 50, 0.14) 0%,
+    transparent 70%
+  );
+  --gradient-card-glow: radial-gradient(
+    ellipse 60% 40% at 50% 0%,
+    rgba(198, 244, 50, 0.07) 0%,
+    transparent 60%
+  );
+  --gradient-mesh:
+    radial-gradient(at 40% 20%, rgba(198, 244, 50, 0.05) 0%, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(124, 207, 0, 0.04) 0%, transparent 50%);
+  --gradient-fade-bottom: linear-gradient(to bottom, transparent 0%, var(--color-background) 100%);
+
+  /* App-shell chrome heights */
+  --topbar-height: 3.625rem; /* 58px */
+  --nav-height: 4rem; /* 64px — mobile bottom nav */
+
+  /* Z-index scale — reference for overlays/raw CSS. shadcn/reka overlays use
+     z-50; toasts use z-100. Documented here so future layers stay consistent. */
+  --z-dropdown: 40;
+  --z-sticky: 30;
+  --z-overlay: 50;
+  --z-modal: 50;
+  --z-popover: 60;
+  --z-toast: 100;
+}
+
+/* Mobile perf — step the glass backdrop-blur down. backdrop-filter is the most
+   expensive per-frame effect on phones, and there are many glass surfaces; a
+   smaller radius keeps the frosted look while easing fill-rate on small screens.
+   Cascades into every .glass-surface(-strong) utility via var(--glass-blur). */
+@media (max-width: 640px) {
+  :root {
+    --glass-blur: 8px;
+  }
+}

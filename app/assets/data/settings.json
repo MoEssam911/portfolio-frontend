@@ -1,0 +1,13 @@
+{
+  "siteTitle": "Mohamed Essam",
+  "siteDescription": "Frontend developer specializing in Vue & Nuxt, building fast, accessible interfaces with an engineer's rigor and an eye for detail.",
+  "heroTitle": "Crafting frontends with the discipline of an engineer.",
+  "heroSubtitle": "I'm a frontend developer specializing in Vue and Nuxt — crafting fast, accessible, and maintainable interfaces. I bring an engineer's mindset to every project: clean architecture, attention to detail, and code built to last.",
+  "about": "I'm Mohamed Essam, a frontend developer who treats interfaces as engineering problems. With deep expertise in Vue and Nuxt, I build products that are not only beautiful and intuitive, but also performant, accessible, and built on solid architecture. I care as much about clean, maintainable code as I do about the experience it delivers.",
+  "githubUrl": "https://github.com/MoEssam911",
+  "linkedinUrl": "https://www.linkedin.com/in/moessam911/",
+  "twitterUrl": null,
+  "contactEmail": "mohameddessam303@gmail.com",
+  "resumeFileUrl": "/mohamed-essam-cv.pdf",
+  "availableForWork": true
+}

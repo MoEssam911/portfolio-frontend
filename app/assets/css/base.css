@@ -1,0 +1,132 @@
+/* ─────────────────────────────────────────────────────────────────────
+   Global base styles
+───────────────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: var(--leading-relaxed);
+
+    /* Render quality */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-optical-sizing: auto;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    @apply font-sans;
+  }
+
+  /* Display headings — Space Grotesk, tight tracking. Never exceed 700;
+     heavier weights rarely render refined at screen size. Override per-section
+     in components when a different size/weight is needed. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-tight);
+    color: var(--color-foreground);
+    font-optical-sizing: auto;
+  }
+
+  /* NOTE (RTL cleanup): the previous Arabic/RTL build forced these Latin inputs
+     to `direction: ltr; text-align: end` to right-align them. The app is now
+     LTR-only, so the override is removed — inputs use the default LTR alignment.
+     BaseFormField still sets dir="ltr" on email/tel/number/url/password. */
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Lenis smooth scroll — required structural styles.
+   The engine itself is started only when motion is allowed (see
+   app/plugins/lenis.client.ts); these rules are inert until Lenis adds its
+   classes to <html>.
+───────────────────────────────────────────────────────────────────── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Page transitions — View Transitions API (enabled via
+   experimental.viewTransition in nuxt.config.ts). A holographic fade-up: the
+   outgoing page sinks and dissolves while the incoming page rises into place
+   behind a clip-path wipe that reveals it top→bottom. Kept short and
+   GPU-friendly (opacity/transform/clip only); neutralised under reduced motion.
+───────────────────────────────────────────────────────────────────── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-slow, 400ms);
+  animation-timing-function: var(--ease-cinematic, ease);
+}
+::view-transition-old(root) {
+  animation-name: vt-fade-down-out;
+}
+::view-transition-new(root) {
+  animation-name: vt-fade-up-in;
+}
+@keyframes vt-fade-down-out {
+  to {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.995);
+  }
+}
+@keyframes vt-fade-up-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Reduced motion — global backstop.
+   Composables (useScrollReveal) and the Lenis plugin already skip JS-driven
+   motion when the user prefers reduced motion; this neutralises any remaining
+   CSS transitions/animations and disables smooth scroll anchoring.
+───────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Skip the page cross-fade entirely. */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

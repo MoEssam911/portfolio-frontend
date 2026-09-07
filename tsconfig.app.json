@@ -1,0 +1,21 @@
+{
+  "extends": "./.nuxt/tsconfig.app.json",
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "useUnknownInCatchVariables": true,
+    "noUncheckedIndexedAccess": true,
+    "noFallthroughCasesInSwitch": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./app/*"],
+      "~/*": ["./app/*"],
+      "@core/*": ["./app/core/*"],
+      "@modules/*": ["./app/modules/*"],
+      "@ui/*": ["./app/components/ui/*"],
+      "@layouts/*": ["./app/layouts/*"]
+    }
+  },
+  "exclude": ["node_modules", ".output"]
+}

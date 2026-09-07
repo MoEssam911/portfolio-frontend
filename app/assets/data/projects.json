@@ -1,0 +1,53 @@
+[
+  {
+    "slug": "business-chat-platform",
+    "title": "Business Chat Platform",
+    "excerpt": "A business chat web application that powers customer conversations at scale, shipped feature by feature.",
+    "description": "A business communication platform that lets companies manage customer conversations across channels in one place. I develop and maintain the frontend, continuously shipping new features and fixes while improving performance and refining the system design for better scalability and maintainability. I collaborate on architecture decisions and own frontend features end to end, with an engineer's attention to detail and a focus on a fast, reliable real-time experience.",
+    "projectType": "professional",
+    "role": "Frontend Developer",
+    "clientName": "Bevatel",
+    "technologies": ["Vue 3", "TypeScript", "Pinia"],
+    "featured": true,
+    "thumbnailUrl": null,
+    "images": [],
+    "liveUrl": null,
+    "repoUrl": null,
+    "createdAt": "2025-10-01T00:00:00.000Z",
+    "updatedAt": "2026-06-21T00:00:00.000Z"
+  },
+  {
+    "slug": "fundex",
+    "title": "Fundex — Investment Fund Platform",
+    "excerpt": "A fintech platform for browsing, managing, and investing in funds, built for clarity and data integrity.",
+    "description": "Fundex is an investment-fund platform that lets users browse, manage, and invest in funds through a responsive, intuitive interface. I translated complex fintech requirements into clean, maintainable Vue and TypeScript components, with a strong focus on accuracy and data integrity across every flow. The result was a polished, trustworthy experience for managing fund investments, backed by a scalable codebase the team could keep building on.",
+    "projectType": "professional",
+    "role": "Frontend Developer",
+    "clientName": "Dafa",
+    "technologies": ["Vue 3", "TypeScript", "Pinia"],
+    "featured": true,
+    "thumbnailUrl": null,
+    "images": [],
+    "liveUrl": null,
+    "repoUrl": null,
+    "createdAt": "2024-10-01T00:00:00.000Z",
+    "updatedAt": "2025-10-01T00:00:00.000Z"
+  },
+  {
+    "slug": "safety-monitor",
+    "title": "Safety Monitor — AI Factory Safety System",
+    "excerpt": "An AI-powered system that verifies in real time whether factory workers are wearing their required protective equipment.",
+    "description": "Safety Monitor helps industrial facilities enforce workplace safety by using AI to verify that workers are equipped with required protective gear — helmets, vests, and more — across live camera feeds. I built the frontend in Vue 3 and TypeScript, turning a continuous stream of AI detection data into clear, real-time dashboards with interactive ApexCharts visualizations on a Vuetify-based interface. The system gave safety teams instant visibility into compliance and incidents, replacing manual spot-checks with automated, data-driven monitoring.",
+    "projectType": "professional",
+    "role": "Frontend Developer",
+    "clientName": "AI Tech",
+    "technologies": ["Vue 3", "TypeScript", "ApexCharts", "Vuetify"],
+    "featured": true,
+    "thumbnailUrl": null,
+    "images": [],
+    "liveUrl": null,
+    "repoUrl": null,
+    "createdAt": "2023-10-01T00:00:00.000Z",
+    "updatedAt": "2024-10-01T00:00:00.000Z"
+  }
+]
