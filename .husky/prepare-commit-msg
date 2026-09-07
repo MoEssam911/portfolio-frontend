@@ -1,0 +1,12 @@
+#!/bin/sh
+# Strip Cursor/Claude co-author trailers so agent commits stay sole-authored.
+MSG_FILE="$1"
+if [ -z "$MSG_FILE" ] || [ ! -f "$MSG_FILE" ]; then
+  exit 0
+fi
+
+# Portable in-place edit without relying on GNU/BSD sed differences.
+tmp="${MSG_FILE}.tmp"
+grep -v -E -i 'Co-authored-by:.*(cursor|cursoragent|claude|anthropic)' "$MSG_FILE" | \
+  grep -v -E -i 'Made-with:[[:space:]]*Cursor' > "$tmp" || true
+mv "$tmp" "$MSG_FILE"
