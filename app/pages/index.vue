@@ -61,9 +61,6 @@ useHead({
   <!-- Home composition. -->
   <HeroSection />
   <FeaturedWork />
-  <ServicesSection />
-  <SkillsOrbit />
-  <TestimonialsSection />
   <AboutTeaser />
   <ContactCTA />
 </template>

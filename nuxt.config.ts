@@ -1,12 +1,17 @@
 import tailwindcss from '@tailwindcss/vite';
 
+import projects from './app/assets/data/projects.json';
+
+const projectRoutes = (projects as { slug: string }[]).map((p) => `/projects/${p.slug}`);
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   future: {
     compatibilityVersion: 4,
   },
   srcDir: 'app/',
-  devtools: { enabled: true },
+  // Devtools only in development — keeps production/static builds lean.
+  devtools: { enabled: process.env.NODE_ENV !== 'production' },
   css: ['./app/assets/css/main.css', 'vue-sonner/style.css'],
 
   components: [
@@ -23,9 +28,6 @@ export default defineNuxtConfig({
       'modules/settings/composables',
       'modules/projects/composables',
       'modules/resume/composables',
-      'modules/services/composables',
-      'modules/testimonials/composables',
-      'stores',
       'core/utils',
       // Add new module composable dirs here as modules are created
     ],
@@ -35,32 +37,25 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
 
-  modules: [
-    '@nuxt/fonts',
-    '@nuxt/eslint',
-    '@pinia/nuxt',
-    '@vee-validate/nuxt',
-    '@nuxt/icon',
-    '@nuxt/image',
-  ],
+  modules: ['@nuxt/fonts', '@nuxt/eslint', '@vee-validate/nuxt', '@nuxt/icon', '@nuxt/image'],
 
   nitro: {
     prerender: {
       crawlLinks: true,
-      routes: ['/sitemap.xml', '/robots.txt'],
+      routes: ['/sitemap.xml', '/robots.txt', ...projectRoutes],
     },
   },
 
-  // Self-hosted Google fonts (downloaded at build, served locally). Matches the
-  // family tokens in app/assets/css/tokens.css. display:swap avoids invisible text.
+  // Self-hosted fonts via @nuxt/fonts (downloaded at build). Matches tokens.css.
   fonts: {
     families: [
-      { name: 'Space Grotesk', provider: 'google', weights: [400, 500, 600, 700] },
-      { name: 'Geist', provider: 'google', weights: [300, 400, 500, 600] },
-      { name: 'Geist Mono', provider: 'google', weights: [400, 500] },
+      { name: 'Space Grotesk', provider: 'google', weights: [500, 600, 700] },
+      { name: 'Geist', provider: 'google', weights: [400, 500, 600] },
+      { name: 'Geist Mono', provider: 'google', weights: [400] },
     ],
     defaults: {
       styles: ['normal'],
+      subsets: ['latin'],
     },
   },
 
@@ -73,8 +68,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       // Exposed to both server and client-side code. Never put secrets here.
-      appName: process.env.NUXT_PUBLIC_APP_NAME ?? 'Portfolio',
+      appName: process.env.NUXT_PUBLIC_APP_NAME ?? 'Mohamed Essam',
       appEnv: process.env.NUXT_PUBLIC_APP_ENV ?? process.env.NODE_ENV ?? 'development',
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL ?? '',
     },
   },
 
@@ -85,6 +81,7 @@ export default defineNuxtConfig({
 
   experimental: {
     typedPages: true, // Type-safe useRoute() params — zero runtime cost
-    viewTransition: true, // Smooth page transitions via View Transitions API
+    // View Transitions delay bf-cache restoration and add first-paint work.
+    viewTransition: false,
   },
 });

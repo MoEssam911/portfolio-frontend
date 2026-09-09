@@ -13,42 +13,48 @@ const props = withDefaults(defineProps<Props>(), {
   large: false,
 });
 
-// Cap the chips so dense stacks don't overflow the card.
 const visibleTech = computed(() => props.project.technologies.slice(0, props.large ? 5 : 3));
 const extraTech = computed(() =>
   Math.max(0, props.project.technologies.length - visibleTech.value.length),
 );
 
-// Gentle pointer parallax on the cover — translate-only, no tilt (see useParallax).
 const mediaRef = ref<HTMLElement | null>(null);
 const imageRef = ref<HTMLElement | null>(null);
 useParallax(mediaRef, imageRef, { strength: 14 });
 </script>
 
 <template>
-  <BaseCard
-    as="NuxtLink"
-    interactive
+  <!-- Real NuxtLink so SSG crawlLinks / crawlers see href. -->
+  <NuxtLink
     :to="`/projects/${project.slug}`"
-    :class="cn('group relative flex h-full flex-col overflow-hidden', props.class)"
+    :class="
+      cn(
+        'glass-surface neon-glow group relative flex h-full flex-col overflow-hidden rounded-2xl',
+        props.class,
+      )
+    "
   >
-    <!-- Media -->
     <div
       ref="mediaRef"
       :class="
         cn('relative w-full overflow-hidden bg-muted', large ? 'aspect-16/10' : 'aspect-video')
       "
     >
-      <img
+      <div
         v-if="project.thumbnailUrl"
         ref="imageRef"
-        :src="project.thumbnailUrl"
-        :alt="project.title"
-        class="size-full scale-105 object-cover transition-transform duration-500 ease-out"
-        loading="lazy"
-        decoding="async"
-      />
-      <!-- Fallback when no thumbnail: subtle lime wash + monogram. -->
+        class="size-full scale-105 transition-transform duration-500 ease-out"
+      >
+        <NuxtImg
+          :src="project.thumbnailUrl"
+          :alt="project.title"
+          class="size-full object-cover"
+          loading="lazy"
+          format="webp"
+          quality="75"
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+      </div>
       <div v-else class="bg-card-glow flex size-full items-center justify-center">
         <span class="font-display text-4xl text-primary/30">{{ project.title.charAt(0) }}</span>
       </div>
@@ -58,7 +64,6 @@ useParallax(mediaRef, imageRef, { strength: 14 });
       />
     </div>
 
-    <!-- Body -->
     <div class="flex flex-1 flex-col gap-3 p-5">
       <div class="flex items-start justify-between gap-3">
         <h3
@@ -97,5 +102,5 @@ useParallax(mediaRef, imageRef, { strength: 14 });
         Professional Work
       </p>
     </div>
-  </BaseCard>
+  </NuxtLink>
 </template>

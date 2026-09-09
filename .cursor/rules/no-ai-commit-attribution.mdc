@@ -1,6 +1,0 @@
-# Commit attribution
-
-Never add `Co-authored-by`, `Made-with: Cursor`, or any Cursor/Claude/Anthropic
-attribution trailers to git commits, PRs, or commit messages.
-
-Commits must be authored only by the repository owner.

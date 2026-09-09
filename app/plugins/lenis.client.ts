@@ -40,8 +40,16 @@ export default defineNuxtPlugin((nuxtApp) => {
   };
 
   const sync = () => {
-    if (media.matches) stop();
-    else start();
+    if (media.matches) {
+      stop();
+      return;
+    }
+    // Defer Lenis until after first paint so it doesn't compete with LCP.
+    const schedule =
+      typeof window.requestIdleCallback === 'function'
+        ? window.requestIdleCallback
+        : (cb: () => void) => window.setTimeout(cb, 200);
+    schedule(() => start());
   };
 
   sync();

@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { Skeleton } from '@/components/ui/skeleton';
 import type { Education, Experience, TimelineEntry } from '~/modules/resume/types';
 
-const { data: resume, pending, error } = useResume();
+const { data: resume } = useResume();
 const { settings } = useSiteSettings();
 const { formatDate } = useFormatters();
 
@@ -74,7 +73,6 @@ const isEmpty = computed(
       certifications.value.length === 0 &&
       !summary.value),
 );
-const showSkeleton = computed(() => pending.value && !resume.value);
 
 const certRange = (issue: string | null, expiry: string | null) =>
   [issue ? formatDate(issue, 'MMM YYYY') : '', expiry ? formatDate(expiry, 'MMM YYYY') : '']
@@ -83,24 +81,8 @@ const certRange = (issue: string | null, expiry: string | null) =>
 </script>
 
 <template>
-  <!-- Loading -->
-  <div v-if="showSkeleton" class="glass-surface flex flex-col gap-8 rounded-3xl p-8 sm:p-12">
-    <div class="flex flex-col gap-3">
-      <Skeleton class="h-9 w-64" />
-      <Skeleton class="h-5 w-80" />
-      <Skeleton class="h-4 w-72" />
-    </div>
-    <Skeleton v-for="n in 3" :key="n" class="h-28 w-full rounded-2xl" />
-  </div>
-
-  <!-- Error -->
-  <div v-else-if="error" class="glass-surface rounded-3xl p-12 text-center">
-    <Icon name="lucide:triangle-alert" class="mx-auto size-6 text-muted-foreground" />
-    <p class="mt-3 text-sm text-muted-foreground">Couldn't load the resume right now.</p>
-  </div>
-
   <!-- Empty -->
-  <div v-else-if="isEmpty" class="glass-surface rounded-3xl border-dashed p-12 text-center">
+  <div v-if="isEmpty" class="glass-surface rounded-3xl border-dashed p-12 text-center">
     <Icon name="lucide:file-text" class="mx-auto size-6 text-muted-foreground" />
     <p class="mt-3 text-sm text-muted-foreground">The resume is being written.</p>
   </div>

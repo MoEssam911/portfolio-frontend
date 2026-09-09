@@ -1,17 +1,20 @@
 name: CI/CD Pipeline
 
+# PRs: validate only.
+# Push to develop / main: validate → generate → deploy via Netlify CLI (not Netlify Git builds).
 on:
   pull_request:
     branches: ['**']
   push:
-    branches: ['**']
+    branches: [develop, main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   validate:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [24.15]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,7 +22,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
@@ -35,9 +38,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: validate
     if: github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'develop')
-    strategy:
-      matrix:
-        node-version: [24.15]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -45,32 +45,71 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Select Netlify site
+      - name: Resolve Netlify site + public env
         shell: bash
         run: |
+          set -euo pipefail
           case "$GITHUB_REF_NAME" in
             main)
-              echo "NETLIFY_SITE_ID=${{ secrets.NETLIFY_SITE_ID_PROD }}" >> $GITHUB_ENV
+              SITE_ID="${{ secrets.NETLIFY_SITE_ID_PROD }}"
+              SITE_URL="${{ vars.NUXT_PUBLIC_SITE_URL_PROD }}"
+              APP_ENV=production
               ;;
             develop)
-              echo "NETLIFY_SITE_ID=${{ secrets.NETLIFY_SITE_ID_DEV }}" >> $GITHUB_ENV
+              SITE_ID="${{ secrets.NETLIFY_SITE_ID_DEV }}"
+              SITE_URL="${{ vars.NUXT_PUBLIC_SITE_URL_DEV }}"
+              APP_ENV=development
+              ;;
+            *)
+              echo "Unsupported branch: $GITHUB_REF_NAME" >&2
+              exit 1
               ;;
           esac
 
+          if [ -z "$SITE_ID" ]; then
+            echo "Missing Netlify site ID secret for $GITHUB_REF_NAME" >&2
+            exit 1
+          fi
+          if [ -z "$SITE_URL" ]; then
+            echo "Missing NUXT_PUBLIC_SITE_URL_* repository variable for $GITHUB_REF_NAME" >&2
+            exit 1
+          fi
+          if [ -z "${{ secrets.NETLIFY_AUTH_TOKEN }}" ]; then
+            echo "Missing NETLIFY_AUTH_TOKEN secret" >&2
+            exit 1
+          fi
+
+          {
+            echo "NETLIFY_SITE_ID=$SITE_ID"
+            echo "NUXT_PUBLIC_SITE_URL=$SITE_URL"
+            echo "NUXT_PUBLIC_APP_ENV=$APP_ENV"
+            echo "NUXT_PUBLIC_APP_NAME=Mohamed Essam"
+          } >> "$GITHUB_ENV"
+
       - name: Generate static site
-        # NITRO_PRESET must be set HERE: netlify.toml's [build.environment] only
-        # applies to Netlify's own builds, not this GitHub Actions runner.
+        # NITRO_PRESET must be set here — netlify.toml [build.environment] is for Netlify builds only.
         env:
           NITRO_PRESET: netlify
+          NUXT_PUBLIC_APP_NAME: ${{ env.NUXT_PUBLIC_APP_NAME }}
+          NUXT_PUBLIC_APP_ENV: ${{ env.NUXT_PUBLIC_APP_ENV }}
+          NUXT_PUBLIC_SITE_URL: ${{ env.NUXT_PUBLIC_SITE_URL }}
         run: npm run generate
 
       - name: Deploy to Netlify
+        # --no-build: assets were already generated above (Netlify CLI v21+ builds by default).
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        run: npx netlify deploy --dir=.output/public --prod --site "$NETLIFY_SITE_ID" --message "${GITHUB_REF_NAME} deploy from GitHub Actions"
+          NETLIFY_SITE_ID: ${{ env.NETLIFY_SITE_ID }}
+        run: >
+          npx --yes netlify-cli deploy
+          --no-build
+          --dir=.output/public
+          --prod
+          --site "$NETLIFY_SITE_ID"
+          --message "${GITHUB_REF_NAME}@${GITHUB_SHA::7} via GitHub Actions"

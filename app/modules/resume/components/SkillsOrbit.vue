@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { Skeleton } from '@/components/ui/skeleton';
 import type { SkillGroup } from '~/modules/resume/types';
 
-// Reuses the cached useResume() call — no extra network round-trip.
-const { data: resume, pending, error } = useResume();
+const { data: resume } = useResume();
 
 const groups = computed<SkillGroup[]>(() =>
   [...(resume.value?.skillGroups ?? [])].sort((a, b) => a.order - b.order),
@@ -97,26 +95,13 @@ function isActive(group: SkillGroup) {
     title="Skills & tools"
     description="The technologies I reach for, grouped by what they do."
   >
-    <!-- Loading -->
-    <div v-if="pending && !groups.length" class="flex justify-center py-8">
-      <Skeleton class="size-75 rounded-full" />
-    </div>
-
-    <!-- Error -->
-    <div v-else-if="error" class="glass-surface rounded-2xl p-10 text-center">
-      <Icon name="lucide:triangle-alert" class="mx-auto size-6 text-muted-foreground" />
-      <p class="mt-3 text-sm text-muted-foreground">Couldn't load skills right now.</p>
-    </div>
-
-    <!-- Empty -->
     <div
-      v-else-if="!groups.length"
+      v-if="!groups.length"
       class="glass-surface rounded-2xl border-dashed p-10 text-center"
     >
       <p class="text-sm text-muted-foreground">Skills are being curated.</p>
     </div>
 
-    <!-- Populated -->
     <div v-else class="flex flex-col gap-8">
       <!-- Desktop: SVG orbital (hidden on mobile) -->
       <div class="hidden justify-center md:flex">

@@ -1,5 +1,4 @@
 import { usePreferredReducedMotion } from '@vueuse/core';
-import { animate, stagger } from 'motion';
 import type { Ref } from 'vue';
 
 export interface ScrollRevealOptions {
@@ -27,19 +26,8 @@ export interface ScrollRevealOptions {
 type MaybeElementRef = Ref<HTMLElement | null | undefined>;
 
 /**
- * Scroll-triggered entrance animation — the workhorse for section reveals.
- *
- * Pass a template ref to the container. On enter (via IntersectionObserver) the
- * container — or its matching children, staggered — fade and rise into place
- * using `motion`'s `animate`/`stagger`.
- *
- * Honours reduced motion: when the user prefers reduced motion, no observer is
- * created and elements render in their final state immediately. Always awaits
- * `nextTick()` so the DOM is ready before it is queried.
- *
- * @example
- * const section = ref<HTMLElement>()
- * useScrollReveal(section, { selector: '[data-reveal]', stagger: 0.06 })
+ * Scroll-triggered entrance animation. Lazy-loads `motion` so home first paint
+ * does not pay for the animation library until a section actually reveals.
  */
 export function useScrollReveal(target: MaybeElementRef, options: ScrollRevealOptions = {}) {
   const {
@@ -53,12 +41,9 @@ export function useScrollReveal(target: MaybeElementRef, options: ScrollRevealOp
     rootMargin = '0px 0px -10% 0px',
   } = options;
 
-  // @vueuse's `usePreferredReducedMotion` is SSR-safe and returns
-  // 'no-preference' | 'reduce', resolving to the real value once mounted.
   const preferredMotion = usePreferredReducedMotion();
   const reduced = computed(() => preferredMotion.value === 'reduce');
 
-  // Server render never animates — final state only.
   if (import.meta.server) return;
 
   let observer: IntersectionObserver | null = null;
@@ -74,8 +59,9 @@ export function useScrollReveal(target: MaybeElementRef, options: ScrollRevealOp
     }
   };
 
-  const reveal = (els: HTMLElement[]) => {
-    animate(
+  const reveal = async (els: HTMLElement[]) => {
+    const { animate, stagger } = await import('motion');
+    await animate(
       els,
       { opacity: [0, 1], transform: [`translateY(${y}px)`, 'translateY(0px)'] },
       {
@@ -83,9 +69,8 @@ export function useScrollReveal(target: MaybeElementRef, options: ScrollRevealOp
         delay: els.length > 1 ? stagger(staggerDelay, { startDelay: delay }) : delay,
         ease: [0.16, 1, 0.3, 1],
       },
-    ).then(() => {
-      for (const el of els) el.style.willChange = '';
-    });
+    );
+    for (const el of els) el.style.willChange = '';
   };
 
   onMounted(async () => {
@@ -95,8 +80,6 @@ export function useScrollReveal(target: MaybeElementRef, options: ScrollRevealOp
 
     const els = resolveTargets(root);
     if (els.length === 0) return;
-
-    // Reduced motion: leave everything in its natural, fully-visible state.
     if (reduced.value) return;
 
     setHidden(els);
@@ -105,10 +88,8 @@ export function useScrollReveal(target: MaybeElementRef, options: ScrollRevealOp
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
-          reveal(els);
-          if (once) {
-            observer?.unobserve(entry.target);
-          }
+          void reveal(els);
+          if (once) observer?.unobserve(entry.target);
         }
       },
       { threshold, rootMargin },

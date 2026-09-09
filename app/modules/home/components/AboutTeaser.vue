@@ -1,22 +1,19 @@
 <script setup lang="ts">
 import { buttonVariants } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
-const { settings, pending } = useSiteSettings();
+const { settings } = useSiteSettings();
 
 const about = computed(() => settings.value?.about?.trim() || '');
-const availableForWork = computed(() => settings.value?.availableForWork ?? false);
+const name = computed(() => settings.value?.siteTitle || 'Mohamed Essam');
 
-// Keep the teaser tight — a couple of sentences, full story lives on /about.
+// Tight teaser — full story lives on /about; portrait returns here on home.
 const teaser = computed(() => {
   const text = about.value;
   if (!text) return '';
   const sentences = text.split(/(?<=[.!?])\s+/).slice(0, 3);
   return sentences.join(' ');
 });
-
-const showSkeleton = computed(() => pending.value && !settings.value);
 
 const sectionRef = ref<HTMLElement>();
 useScrollReveal(sectionRef, { selector: '[data-reveal]', stagger: 0.1 });
@@ -25,61 +22,51 @@ useScrollReveal(sectionRef, { selector: '[data-reveal]', stagger: 0.1 });
 <template>
   <Section class="relative overflow-hidden">
     <SectionAurora class="-z-10" />
-    <div ref="sectionRef" class="grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-      <!-- Portrait -->
-      <div data-reveal class="relative mx-auto w-full max-w-xs lg:max-w-sm">
-        <div class="glow-spot absolute -inset-6 -z-10 rounded-full blur-2xl" aria-hidden="true" />
+    <div
+      ref="sectionRef"
+      class="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14"
+    >
+      <div data-reveal class="relative mx-auto w-full max-w-xs lg:mx-0">
         <div
-          class="glass-surface-strong relative overflow-hidden rounded-3xl ring-1 ring-primary/20"
-        >
-          <Portrait class="aspect-4/5 w-full" alt="Portrait of Mohamed Essam" />
+          class="absolute -inset-5 -z-10 rounded-full bg-[radial-gradient(circle_at_center,var(--lime-glow)_0%,transparent_70%)] blur-2xl"
+          aria-hidden="true"
+        />
+        <div class="glass-surface-strong overflow-hidden rounded-3xl p-1.5">
+          <div class="overflow-hidden rounded-[1.35rem]">
+            <Portrait
+              class="aspect-4/5 w-full"
+              :alt="`Portrait of ${name}`"
+              loading="lazy"
+              sizes="(max-width: 1024px) 280px, 320px"
+            />
+          </div>
         </div>
       </div>
 
-      <!-- Copy -->
-      <div class="flex flex-col gap-5">
+      <div class="mx-auto max-w-xl text-center lg:mx-0 lg:text-left">
         <p data-reveal class="label text-primary">About</p>
+        <h2 data-reveal class="mt-3 font-display text-3xl text-foreground sm:text-4xl">
+          Engineering with craft and clarity.
+        </h2>
+        <p
+          data-reveal
+          class="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground"
+        >
+          {{
+            teaser ||
+            'I build interfaces that behave like products — fast, accessible, and considered down to the last interaction.'
+          }}
+        </p>
 
-        <template v-if="showSkeleton">
-          <Skeleton class="h-9 w-3/4" />
-          <Skeleton class="h-5 w-full" />
-          <Skeleton class="h-5 w-11/12" />
-          <Skeleton class="h-5 w-4/5" />
-        </template>
-
-        <template v-else>
-          <h2 data-reveal class="font-display text-3xl text-foreground sm:text-4xl">
-            Engineering precision, design sensibility.
-          </h2>
-          <p
-            v-if="teaser"
-            data-reveal
-            class="text-pretty text-lg leading-relaxed text-muted-foreground"
-          >
-            {{ teaser }}
-          </p>
-          <p v-else data-reveal class="text-pretty text-lg leading-relaxed text-muted-foreground">
-            I build interfaces that behave like products — fast, accessible, and considered down to
-            the last interaction.
-          </p>
-
-          <div data-reveal class="mt-2 flex flex-wrap items-center gap-4">
-            <NuxtLink
-              to="/about"
-              :class="cn(buttonVariants({ size: 'lg' }), 'h-10 px-5 shadow-cta')"
-            >
-              More about me
-              <Icon name="lucide:arrow-right" class="size-4" />
-            </NuxtLink>
-            <span
-              v-if="availableForWork"
-              class="inline-flex items-center gap-2 text-sm text-muted-foreground"
-            >
-              <span class="pulse-dot size-1.5 rounded-full bg-success" aria-hidden="true" />
-              Available for work
-            </span>
-          </div>
-        </template>
+        <div
+          data-reveal
+          class="mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start"
+        >
+          <NuxtLink to="/about" :class="cn(buttonVariants({ size: 'lg' }), 'h-10 px-5 shadow-cta')">
+            More about me
+            <Icon name="lucide:arrow-right" class="size-4" />
+          </NuxtLink>
+        </div>
       </div>
     </div>
   </Section>

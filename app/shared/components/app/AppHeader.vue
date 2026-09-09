@@ -13,7 +13,6 @@ import {
 import { cn } from '@/lib/utils';
 
 const route = useRoute();
-const { settings } = useSiteSettings();
 const { show: showCommandMenu } = useCommandMenu();
 const { y } = useWindowScroll();
 
@@ -46,12 +45,9 @@ watch(
         <NuxtLink
           to="/"
           class="group flex items-center gap-2.5 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          aria-label="Home"
         >
           <AppLogo mark-only />
-          <span
-            class="text-gradient hidden font-display text-base font-semibold tracking-tight sm:inline md:hidden lg:inline"
-          >
+          <span class="text-gradient font-display text-base font-semibold tracking-tight">
             Mohamed Essam
           </span>
         </NuxtLink>
@@ -89,18 +85,6 @@ watch(
         </nav>
 
         <div class="flex items-center gap-2 sm:gap-3">
-          <!-- Availability status — glass pill with pulsing neon dot. -->
-          <span
-            v-if="settings?.availableForWork"
-            class="hidden items-center gap-2 rounded-full border border-primary-border bg-primary-subtle px-3 py-1.5 text-xs text-primary-light lg:inline-flex"
-          >
-            <span
-              class="pulse-dot size-1.5 rounded-full bg-primary shadow-[0_0_6px_var(--color-primary)]"
-              aria-hidden="true"
-            />
-            Available
-          </span>
-
           <!-- Command palette trigger (⌘K). Glass pill on desktop, icon on mobile. -->
           <button
             type="button"
@@ -134,7 +118,7 @@ watch(
               )
             "
           >
-            Hire me
+            Contact me
           </NuxtLink>
 
           <!-- Mobile menu -->
@@ -174,18 +158,8 @@ watch(
               </nav>
 
               <div class="mt-auto flex flex-col gap-3 p-6">
-                <span
-                  v-if="settings?.availableForWork"
-                  class="inline-flex items-center gap-2 text-xs text-primary-light"
-                >
-                  <span
-                    class="pulse-dot size-1.5 rounded-full bg-primary shadow-[0_0_6px_var(--color-primary)]"
-                    aria-hidden="true"
-                  />
-                  Available for work
-                </span>
                 <NuxtLink to="/contact" :class="cn(buttonVariants({ size: 'lg' }), 'shadow-cta')">
-                  Hire me
+                  Contact me
                 </NuxtLink>
               </div>
             </SheetContent>

@@ -1,6 +1,5 @@
 import { escapeXml, fetchProjects } from '../utils/public-content';
 
-// Static, indexable top-level routes and their relative priority.
 const STATIC_ROUTES: Array<{ path: string; priority: string; changefreq: string }> = [
   { path: '/', priority: '1.0', changefreq: 'weekly' },
   { path: '/projects', priority: '0.9', changefreq: 'weekly' },
@@ -8,6 +7,13 @@ const STATIC_ROUTES: Array<{ path: string; priority: string; changefreq: string 
   { path: '/resume', priority: '0.6', changefreq: 'monthly' },
   { path: '/contact', priority: '0.5', changefreq: 'yearly' },
 ];
+
+function siteOrigin(event: Parameters<typeof getRequestURL>[0]) {
+  const config = useRuntimeConfig(event);
+  const configured = (config.public.siteUrl as string | undefined)?.replace(/\/$/, '');
+  if (configured) return configured;
+  return getRequestURL(event).origin;
+}
 
 function urlEntry(loc: string, opts: { lastmod?: string; priority?: string; changefreq?: string }) {
   return [
@@ -23,7 +29,7 @@ function urlEntry(loc: string, opts: { lastmod?: string; priority?: string; chan
 }
 
 export default defineEventHandler((event) => {
-  const { origin } = getRequestURL(event);
+  const origin = siteOrigin(event);
   const projects = fetchProjects();
 
   const entries = [

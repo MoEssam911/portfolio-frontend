@@ -82,7 +82,23 @@ function reset() {
     </div>
 
     <!-- Form -->
-    <form v-else class="flex flex-col gap-5" novalidate @submit="onSubmit">
+    <form
+      v-else
+      name="contact"
+      method="POST"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      class="flex flex-col gap-5"
+      novalidate
+      @submit="onSubmit"
+    >
+      <input type="hidden" name="form-name" value="contact" />
+      <p class="hidden" aria-hidden="true">
+        <label>
+          Don’t fill this out:
+          <input name="bot-field" tabindex="-1" autocomplete="off" />
+        </label>
+      </p>
       <div class="grid gap-5 sm:grid-cols-2">
         <div class="relative">
           <Input

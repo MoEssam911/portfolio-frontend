@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { buttonVariants } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
-const { settings, pending: settingsPending } = useSiteSettings();
-const { data: resume, pending: resumePending, error: resumeError } = useResume();
+const { settings } = useSiteSettings();
+const { data: resume } = useResume();
 
 const url = useRequestURL();
 
@@ -12,7 +11,6 @@ const name = computed(() => settings.value?.siteTitle || 'Mohamed Essam');
 const role = computed(() => resume.value?.headline || settings.value?.heroSubtitle || '');
 const location = computed(() => resume.value?.location || '');
 const email = computed(() => settings.value?.contactEmail || '');
-const availableForWork = computed(() => settings.value?.availableForWork ?? false);
 
 // Bio — full `about`, split into paragraphs on blank lines (story arc).
 const bioParagraphs = computed(() => {
@@ -23,7 +21,6 @@ const bioParagraphs = computed(() => {
     .map((p) => p.replace(/\s*\n\s*/g, ' ').trim())
     .filter(Boolean);
 });
-const showBioSkeleton = computed(() => settingsPending.value && !settings.value);
 
 // Stack — every skill across groups, de-duplicated into one dense cloud.
 const stack = computed(() => {
@@ -33,7 +30,6 @@ const stack = computed(() => {
   }
   return [...set];
 });
-const showStackSkeleton = computed(() => resumePending.value && stack.value.length === 0);
 
 // Owner-authored principles — brand copy for the About page.
 const values = [
@@ -120,14 +116,7 @@ useHead({
         <div class="glass-surface order-2 flex flex-col gap-5 rounded-3xl p-8 sm:p-10 lg:order-1">
           <p data-reveal class="label w-fit text-primary-light">The story</p>
 
-          <template v-if="showBioSkeleton">
-            <Skeleton class="h-5 w-full" />
-            <Skeleton class="h-5 w-11/12" />
-            <Skeleton class="h-5 w-10/12" />
-            <Skeleton class="h-5 w-4/5" />
-          </template>
-
-          <template v-else-if="bioParagraphs.length">
+          <template v-if="bioParagraphs.length">
             <p
               v-for="(paragraph, i) in bioParagraphs"
               :key="i"
@@ -196,17 +185,8 @@ useHead({
 
     <!-- Stack — flat, de-duplicated technology cloud. -->
     <Section label="Tooling" title="The stack" class="bg-card/30">
-      <div v-if="showStackSkeleton" class="flex flex-wrap gap-2.5">
-        <Skeleton v-for="n in 14" :key="n" class="h-8 w-20 rounded-lg" />
-      </div>
-
-      <div v-else-if="resumeError" class="glass-surface rounded-2xl p-10 text-center">
-        <Icon name="lucide:triangle-alert" class="mx-auto size-6 text-muted-foreground" />
-        <p class="mt-3 text-sm text-muted-foreground">Couldn't load the stack right now.</p>
-      </div>
-
       <div
-        v-else-if="stack.length === 0"
+        v-if="stack.length === 0"
         class="glass-surface rounded-2xl border-dashed p-10 text-center"
       >
         <p class="text-sm text-muted-foreground">The stack is being assembled.</p>
@@ -222,7 +202,7 @@ useHead({
       </div>
     </Section>
 
-    <!-- Availability -->
+    <!-- Contact CTA -->
     <section class="py-20 sm:py-28">
       <Container>
         <div
@@ -232,23 +212,8 @@ useHead({
           <SectionAurora class="opacity-50" />
 
           <div class="relative mx-auto flex max-w-2xl flex-col items-center gap-6">
-            <span
-              v-if="availableForWork"
-              class="inline-flex items-center gap-2 rounded-full border border-success-muted bg-success-muted px-3 py-1 text-sm text-success-muted-foreground"
-            >
-              <span class="pulse-dot size-1.5 rounded-full bg-success" aria-hidden="true" />
-              Available for work
-            </span>
-            <span
-              v-else
-              class="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1 text-sm text-muted-foreground"
-            >
-              <span class="size-1.5 rounded-full bg-muted-foreground" aria-hidden="true" />
-              Currently engaged — open to conversations
-            </span>
-
             <h2 class="text-balance font-display text-4xl text-foreground sm:text-5xl">
-              {{ availableForWork ? "Let's work together." : "Let's stay in touch." }}
+              Let's work together.
             </h2>
             <p class="text-pretty text-lg text-muted-foreground">
               Whether you're scoping a new product or want a second pair of eyes on an existing one,

@@ -9,5 +9,4 @@ export interface SiteSettings {
   twitterUrl: string | null;
   contactEmail: string;
   resumeFileUrl: string | null;
-  availableForWork: boolean;
 }

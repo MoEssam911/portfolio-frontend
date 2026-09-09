@@ -39,7 +39,7 @@ const socials = computed<SocialLink[]>(() => {
     <Container class="flex flex-col gap-10 py-14">
       <div class="flex flex-col justify-between gap-8 sm:flex-row sm:items-start">
         <div class="flex max-w-sm flex-col gap-3">
-          <NuxtLink to="/" class="flex items-center gap-2.5" aria-label="Home">
+          <NuxtLink to="/" class="flex items-center gap-2.5">
             <AppLogo mark-only />
             <span class="text-gradient font-display text-base font-semibold tracking-tight">
               {{ settings?.siteTitle || 'Mohamed Essam' }}

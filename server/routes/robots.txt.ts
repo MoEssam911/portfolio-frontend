@@ -1,7 +1,8 @@
-// Dynamic robots.txt so the Sitemap line carries the live origin (host-aware,
-// works in dev, preview, and prod without hardcoding a domain).
+// Sitemap host prefers NUXT_PUBLIC_SITE_URL so static generates don't emit localhost.
 export default defineEventHandler((event) => {
-  const { origin } = getRequestURL(event);
+  const config = useRuntimeConfig(event);
+  const configured = (config.public.siteUrl as string | undefined)?.replace(/\/$/, '');
+  const origin = configured || getRequestURL(event).origin;
 
   setHeader(event, 'content-type', 'text/plain; charset=utf-8');
   setHeader(event, 'cache-control', 'max-age=3600, public');

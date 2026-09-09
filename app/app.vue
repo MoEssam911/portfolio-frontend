@@ -3,6 +3,9 @@ import { ConfigProvider } from 'reka-ui';
 
 import { TooltipProvider } from '@/components/ui/tooltip';
 
+// Defer the ⌘K palette — not needed for first paint.
+const CommandMenu = defineAsyncComponent(() => import('~/shared/components/app/CommandMenu.vue'));
+
 // LTR, English. Dark is the only theme — it lives in :root, so we never add a
 // `.dark` class here. See app/assets/css/tokens.css.
 // Fonts are self-hosted via @nuxt/fonts (see nuxt.config.ts) — no external
@@ -29,6 +32,8 @@ useHead({
   },
   link: [
     { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+    { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+    { rel: 'manifest', href: '/site.webmanifest' },
     { rel: 'canonical', href: canonical },
   ],
 });
@@ -42,7 +47,7 @@ useSeoMeta({
   ogImage: absoluteUrl(DEFAULT_OG_IMAGE, url.origin),
   twitterCard: 'summary_large_image',
   twitterImage: absoluteUrl(DEFAULT_OG_IMAGE, url.origin),
-  themeColor: '#0a0a0b',
+  themeColor: '#08090b',
 });
 </script>
 
@@ -61,10 +66,8 @@ useSeoMeta({
         <NuxtPage />
       </NuxtLayout>
 
-      <!-- Global overlays: toasts (vue-sonner) + headless confirm dialog host +
-           the ⌘K command palette (opens from anywhere via useCommandMenu). -->
+      <!-- Global overlays: toasts (vue-sonner) + ⌘K command palette. -->
       <Sonner position="bottom-right" close-button />
-      <AppConfirmHost />
       <CommandMenu />
     </TooltipProvider>
   </ConfigProvider>
