@@ -11,7 +11,9 @@ import {
 } from 'reka-ui';
 
 import { cn } from '@/lib/utils';
+import postsData from '~/assets/data/posts.json';
 import projectsData from '~/assets/data/projects.json';
+import type { BlogPost } from '~/modules/blog/types';
 import type { Project } from '~/modules/projects/types';
 
 interface CommandItem {
@@ -45,10 +47,14 @@ useEventListener('keydown', (e: KeyboardEvent) => {
 
 // ── Content, sourced from the static project data bundle. ─────────────────────
 const projects = (projectsData as Project[]).map((p) => ({ slug: p.slug, title: p.title }));
+const posts = (postsData as BlogPost[])
+  .filter((p) => !p.draft)
+  .map((p) => ({ slug: p.slug, title: p.title }));
 
 const NAV: CommandItem[] = [
   { group: 'Navigation', label: 'Home', to: '/', icon: 'lucide:home' },
   { group: 'Navigation', label: 'Work', to: '/projects', icon: 'lucide:layout-grid' },
+  { group: 'Navigation', label: 'Blog', to: '/blog', icon: 'lucide:pen-line' },
   { group: 'Navigation', label: 'About', to: '/about', icon: 'lucide:user' },
   { group: 'Navigation', label: 'Resume', to: '/resume', icon: 'lucide:file-text' },
   { group: 'Navigation', label: 'Contact', to: '/contact', icon: 'lucide:mail' },
@@ -70,7 +76,16 @@ const items = computed<CommandItem[]>(() => {
       to: `/projects/${p.slug}`,
       icon: 'lucide:folder-open',
     }));
-  return [...nav, ...proj];
+  const blog = posts
+    .filter((p) => !q || match(p.title, q))
+    .slice(0, 6)
+    .map<CommandItem>((p) => ({
+      group: 'Blog',
+      label: p.title,
+      to: `/blog/${p.slug}`,
+      icon: 'lucide:newspaper',
+    }));
+  return [...nav, ...proj, ...blog];
 });
 
 // Render grouped while keeping each item's flat index for highlight/keyboard.
