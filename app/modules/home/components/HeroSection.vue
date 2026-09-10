@@ -173,7 +173,7 @@ onScopeDispose(() => {
                   <span class="text-primary">$</span>
                   <span class="ml-2 text-foreground">{{ line.text }}</span>
                 </template>
-                <span class="text-muted-foreground">{{ line.text }}</span>
+                <span v-else class="text-muted-foreground">{{ line.text }}</span>
               </p>
               <p v-if="typingDone" class="flex items-center" aria-hidden="true">
                 <span class="text-primary">$</span>

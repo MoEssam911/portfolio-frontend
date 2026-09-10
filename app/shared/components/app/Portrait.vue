@@ -15,7 +15,8 @@ const props = withDefaults(defineProps<Props>(), {
   alt: 'Portrait of Mohamed Essam',
   loading: 'lazy',
   fetchPriority: 'auto',
-  sizes: '160px',
+  // Featured / about-scale default; pass a tighter sizes hint for small teasers.
+  sizes: '(max-width: 640px) 80vw, 384px',
 });
 </script>
 
@@ -27,10 +28,10 @@ const props = withDefaults(defineProps<Props>(), {
     :loading="props.loading"
     :fetchpriority="props.fetchPriority"
     format="webp"
-    quality="65"
-    :widths="[160, 224, 320]"
+    quality="85"
+    :widths="[320, 480, 640, 768]"
     :sizes="props.sizes"
-    width="320"
-    height="400"
+    width="640"
+    height="800"
   />
 </template>

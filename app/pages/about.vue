@@ -150,7 +150,11 @@ useHead({
               ref="portraitLayer"
               class="overflow-hidden rounded-[1.4rem] transition-transform duration-500 ease-out"
             >
-              <Portrait class="aspect-4/5 w-full" :alt="`Portrait of ${name}`" />
+              <Portrait
+                class="aspect-4/5 w-full"
+                :alt="`Portrait of ${name}`"
+                sizes="(max-width: 1024px) 360px, 420px"
+              />
             </div>
           </div>
         </div>
