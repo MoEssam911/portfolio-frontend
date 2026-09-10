@@ -1,8 +1,12 @@
 import tailwindcss from '@tailwindcss/vite';
 
+import posts from './app/assets/data/posts.json';
 import projects from './app/assets/data/projects.json';
 
 const projectRoutes = (projects as { slug: string }[]).map((p) => `/projects/${p.slug}`);
+const blogRoutes = (posts as { slug: string; draft?: boolean }[])
+  .filter((p) => !p.draft)
+  .map((p) => `/blog/${p.slug}`);
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -28,6 +32,7 @@ export default defineNuxtConfig({
       'modules/settings/composables',
       'modules/projects/composables',
       'modules/resume/composables',
+      'modules/blog/composables',
       'core/utils',
       // Add new module composable dirs here as modules are created
     ],
@@ -42,7 +47,7 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
-      routes: ['/sitemap.xml', '/robots.txt', ...projectRoutes],
+      routes: ['/sitemap.xml', '/robots.txt', ...projectRoutes, ...blogRoutes],
     },
   },
 

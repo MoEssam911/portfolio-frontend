@@ -1,8 +1,9 @@
-import { escapeXml, fetchProjects } from '../utils/public-content';
+import { escapeXml, fetchPosts, fetchProjects } from '../utils/public-content';
 
 const STATIC_ROUTES: Array<{ path: string; priority: string; changefreq: string }> = [
   { path: '/', priority: '1.0', changefreq: 'weekly' },
   { path: '/projects', priority: '0.9', changefreq: 'weekly' },
+  { path: '/blog', priority: '0.85', changefreq: 'weekly' },
   { path: '/about', priority: '0.7', changefreq: 'monthly' },
   { path: '/resume', priority: '0.6', changefreq: 'monthly' },
   { path: '/contact', priority: '0.5', changefreq: 'yearly' },
@@ -31,6 +32,7 @@ function urlEntry(loc: string, opts: { lastmod?: string; priority?: string; chan
 export default defineEventHandler((event) => {
   const origin = siteOrigin(event);
   const projects = fetchProjects();
+  const posts = fetchPosts();
 
   const entries = [
     ...STATIC_ROUTES.map((r) =>
@@ -40,6 +42,13 @@ export default defineEventHandler((event) => {
       urlEntry(`${origin}/projects/${p.slug}`, {
         lastmod: p.updatedAt,
         priority: '0.7',
+        changefreq: 'monthly',
+      }),
+    ),
+    ...posts.map((p) =>
+      urlEntry(`${origin}/blog/${p.slug}`, {
+        lastmod: p.updatedAt,
+        priority: '0.75',
         changefreq: 'monthly',
       }),
     ),

@@ -36,6 +36,7 @@ export interface NavLink {
 export const PRIMARY_NAV: NavLink[] = [
   { label: 'Home', to: '/' },
   { label: 'Work', to: '/projects' },
+  { label: 'Blog', to: '/blog' },
   { label: 'About', to: '/about' },
   { label: 'Resume', to: '/resume' },
 ];

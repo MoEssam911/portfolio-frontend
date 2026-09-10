@@ -1,0 +1,45 @@
+[
+  {
+    "slug": "frontend-performance-optimization",
+    "title": "Frontend Performance Optimization: A Practical Playbook",
+    "excerpt": "A senior-level guide to measuring what matters, reducing load and render cost, and shipping faster Vue and Nuxt experiences without guessing.",
+    "body": "## Why performance is a product decision\n\nUsers do not experience \"frameworks\" — they experience waiting. A slow first paint, a layout shift under a button, or a janky scroll all communicate the same thing: the product is not ready for them.\n\nPerformance work is most effective when it is treated as engineering discipline, not a last-minute Lighthouse chase. The goal is simple: **make the critical path short, keep the main thread free, and measure continuously** so regressions cannot hide in a large frontend codebase.\n\n## Start with measurement, not intuition\n\nOptimize against numbers, not vibes. Before rewriting a component tree or swapping libraries, establish a baseline:\n\n1. **Lab data** — Lighthouse / DevTools Performance for reproducible profiles.\n2. **Field data** — real-user metrics (CrUX or your own RUM) for how people actually experience the site.\n3. **Budgets** — explicit ceilings for JS weight, LCP element size, and long tasks.\n\n### Core Web Vitals as a shared language\n\nGoogle's Core Web Vitals give teams a shared vocabulary for user-centric quality:\n\n- **LCP (Largest Contentful Paint)** — when the main content becomes visible.\n- **INP (Interaction to Next Paint)** — how quickly the UI responds to input.\n- **CLS (Cumulative Layout Shift)** — how stable the layout stays while loading.\n\nTreat these as *symptoms*. A poor LCP usually points to late discovery of the hero image, render-blocking CSS/fonts, or a heavy client bundle delaying hydration. A poor INP usually points to long tasks on the main thread. CLS usually points to images or embeds without reserved space, late-injected UI, or web fonts that reflow text.\n\n> If you cannot explain which resource or script caused the regression, you are not done profiling.\n\n## Loading strategy: get the first screen out of the way\n\n### Images\n\nImages are still the most common LCP candidates on marketing and portfolio surfaces.\n\n- Serve modern formats (`webp` / `avif`) with sensible quality.\n- Always set **width and height** (or CSS aspect-ratio) to prevent CLS.\n- Use `loading=\"lazy\"` for below-the-fold media; **eager** (or priority hints) for the LCP image.\n- Prefer responsive `srcset` / `sizes` so mobile does not download a desktop asset.\n\nIn Nuxt, `@nuxt/image` already encodes many of these defaults — use it consistently instead of ad-hoc `<img>` tags for content imagery.\n\n### Fonts\n\nFonts often block rendering or cause late text shifts.\n\n- Limit families and weights to what the UI actually uses.\n- Prefer `font-display: swap` (or optional) with a metric-matched fallback to reduce CLS.\n- Self-host when possible so font requests share the site's connection and caching policy.\n\n### JavaScript\n\nJS is the most expensive resource you ship: it must be downloaded, parsed, compiled, and executed.\n\n- **Code-split by route** so visitors to `/blog` do not pay for the contact form's validation stack.\n- Defer non-critical interactivity (analytics, chat widgets, decorative motion) until after hydration or idle.\n- Audit dependencies — a single convenience library can cost tens of kilobytes for one helper function.\n- Prefer progressive enhancement: static HTML first, interactivity second.\n\nFor Vue and Nuxt specifically:\n\n- Keep client-only plugins genuinely client-only.\n- Use lazy-loaded components for heavy, below-the-fold UI.\n- Avoid shipping large chart or editor libraries on pages that never use them.\n\n## Rendering cost: respect the main thread\n\nA fast network does not fix a busy main thread. After the bytes arrive, the browser still has to style, layout, paint, and run your framework.\n\nPractical habits that compound:\n\n- Prefer **CSS transforms and opacity** for motion; avoid animating layout properties.\n- Honor `prefers-reduced-motion` — accessibility and performance often align.\n- Virtualize long lists; do not mount hundreds of DOM nodes \"just in case.\"\n- Batch DOM reads/writes; layout thrashing is still a real footgun in complex dashboards.\n- Memoization is not free — measure before sprinkling `computed` complexity or hand-rolled caches.\n\nWhen profiling in Chrome DevTools, look for **long tasks** (>50ms). Break them up with `scheduler.yield` / idle callbacks where appropriate, or move pure work off the critical path.\n\n## A repeatable optimization loop\n\nUse the same loop on every feature:\n\n1. **Reproduce** the slow path on a throttled CPU/network profile.\n2. **Attribute** the cost (network waterfall, main-thread flame chart, or layout shift regions).\n3. **Fix the bottleneck** with the smallest change that moves the metric.\n4. **Re-measure** against the same profile and against a budget.\n5. **Guard** with CI or a manual checklist so the fix does not regress next sprint.\n\nThis is how performance becomes a habit instead of a hero project.\n\n## What \"good\" looks like on a portfolio site\n\nFor a content-heavy personal site, a professional bar usually means:\n\n- Fast LCP on a mid-tier mobile device over a realistic network.\n- Near-zero CLS on article and project pages.\n- Minimal JS on read-only routes (blog posts should feel like documents).\n- Predictable fonts and reserved media boxes.\n- Clear ownership: every new dependency has a weight justification.\n\nPerformance is not about chasing a perfect score. It is about **respecting the user's time** and shipping interfaces that feel deliberate under real conditions.\n\n## Takeaways\n\n- Measure with Core Web Vitals and profiles before rewriting architecture.\n- Attack LCP with image, font, and critical-path JS discipline.\n- Protect INP by keeping the main thread free of long tasks.\n- Prevent CLS with stable layout for media, embeds, and typography.\n- Make performance part of the definition of done — not a cleanup pass before launch.",
+    "tags": ["Performance", "Core Web Vitals", "Vue", "Nuxt", "Web Vitals"],
+    "coverUrl": null,
+    "publishedAt": "2026-09-01T00:00:00.000Z",
+    "updatedAt": "2026-09-10T00:00:00.000Z",
+    "featured": true,
+    "sources": [
+      {
+        "title": "Web performance",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Performance",
+        "publisher": "MDN Web Docs"
+      },
+      {
+        "title": "Core Web Vitals",
+        "url": "https://web.dev/articles/vitals",
+        "publisher": "web.dev"
+      },
+      {
+        "title": "Optimize Largest Contentful Paint",
+        "url": "https://web.dev/articles/optimize-lcp",
+        "publisher": "web.dev"
+      },
+      {
+        "title": "Interaction to Next Paint (INP)",
+        "url": "https://web.dev/articles/inp",
+        "publisher": "web.dev"
+      },
+      {
+        "title": "Optimize Cumulative Layout Shift",
+        "url": "https://web.dev/articles/optimize-cls",
+        "publisher": "web.dev"
+      },
+      {
+        "title": "Analyze runtime performance",
+        "url": "https://developer.chrome.com/docs/devtools/performance",
+        "publisher": "Chrome for Developers"
+      }
+    ]
+  }
+]
