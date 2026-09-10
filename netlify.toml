@@ -6,7 +6,8 @@
   ignore = "exit 1"
 
 [build.environment]
-  NITRO_PRESET = "netlify"
+  # Static SSG output (.output/public). Not the SSR `netlify` preset.
+  NITRO_PRESET = "static"
 
 [[headers]]
   for = "/*"

@@ -93,13 +93,20 @@ jobs:
           } >> "$GITHUB_ENV"
 
       - name: Generate static site
-        # NITRO_PRESET must be set here — netlify.toml [build.environment] is for Netlify builds only.
+        # Use static preset so `nuxt generate` writes `.output/public`.
+        # `netlify` preset targets SSR functions and does not produce that folder.
         env:
-          NITRO_PRESET: netlify
+          NITRO_PRESET: static
           NUXT_PUBLIC_APP_NAME: ${{ env.NUXT_PUBLIC_APP_NAME }}
           NUXT_PUBLIC_APP_ENV: ${{ env.NUXT_PUBLIC_APP_ENV }}
           NUXT_PUBLIC_SITE_URL: ${{ env.NUXT_PUBLIC_SITE_URL }}
         run: npm run generate
+
+      - name: Verify publish directory
+        run: |
+          test -d .output/public
+          test -f .output/public/index.html
+          ls -la .output/public | head -n 30
 
       - name: Deploy to Netlify
         # --no-build: assets were already generated above (Netlify CLI v21+ builds by default).
@@ -112,4 +119,4 @@ jobs:
           --dir=.output/public
           --prod
           --site "$NETLIFY_SITE_ID"
-          --message "${GITHUB_REF_NAME}@${GITHUB_SHA::7} via GitHub Actions"
+          --message "${GITHUB_REF_NAME}@${GITHUB_SHA:0:7} via GitHub Actions"
